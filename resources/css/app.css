@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..800;1,9..40,400..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        @apply scroll-smooth;
+        font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    }
+
+    body {
+        @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased selection:bg-primary-500/20 selection:text-primary-600 dark:selection:text-primary-400;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-display tracking-tight;
+    }
+}
+
+@layer components {
+    /* Glassmorphism Card Style matching UI UX Pro Max */
+    .pro-card {
+        @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:border-primary-500/40 dark:hover:border-primary-500/40 hover:shadow-card-hover dark:hover:shadow-card-dark-hover relative overflow-hidden;
+    }
+
+    /* Glow Spot Effect on Hover */
+    .pro-card-glow {
+        @apply relative;
+    }
+    .pro-card-glow::before {
+        content: '';
+        @apply absolute -top-24 -right-24 w-48 h-48 bg-primary-500/10 dark:bg-primary-500/15 rounded-full blur-2xl pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100;
+    }
+
+    /* Pill Badge */
+    .pro-badge {
+        @apply inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-full border transition-all duration-200;
+    }
+
+    /* Hero Glow Dots */
+    .bg-grid-pattern {
+        background-image: radial-gradient(rgba(99, 102, 241, 0.15) 1px, transparent 1px);
+        background-size: 24px 24px;
+    }
+}
+
+@layer utilities {
+    .text-gradient {
+        @apply bg-gradient-to-r from-slate-900 via-primary-600 to-indigo-600 dark:from-white dark:via-primary-300 dark:to-indigo-400 bg-clip-text text-transparent;
+    }
+
+    .text-gradient-primary {
+        @apply bg-gradient-to-r from-primary-600 to-violet-600 dark:from-primary-400 dark:to-violet-400 bg-clip-text text-transparent;
+    }
+
+    .glass-header {
+        @apply bg-white/70 dark:bg-slate-950/70 backdrop-blur-md border-b border-slate-200/60 dark:border-slate-800/60;
+    }
+}
