@@ -1,54 +1,59 @@
 import {
+    Globe,
     Github,
     Linkedin,
-    Mail,
     Twitter,
     Instagram,
     Youtube,
-    Globe,
-    ExternalLink,
+    Facebook,
+    Mail,
+    Send,
 } from 'lucide-react';
 
 const iconMap = {
     github: Github,
     linkedin: Linkedin,
-    email: Mail,
-    mail: Mail,
     twitter: Twitter,
+    x: Twitter,
     instagram: Instagram,
     youtube: Youtube,
+    facebook: Facebook,
+    mail: Mail,
+    email: Mail,
+    telegram: Send,
+    dribbble: Globe,
     website: Globe,
 };
 
-export default function SocialLinks({ links = [], size = 'md', className = '' }) {
+export default function SocialLinks({ links = [], size = 'md' }) {
     if (!links || links.length === 0) return null;
 
     const sizeClasses = {
-        sm: 'w-8 h-8 p-1.5 text-xs',
-        md: 'w-10 h-10 p-2.5 text-sm',
-        lg: 'w-12 h-12 p-3 text-base',
+        sm: 'w-8 h-8 text-xs',
+        md: 'w-9 h-9 text-sm',
+        lg: 'w-10 h-10 text-base',
     };
 
     const iconSizes = {
-        sm: 'w-4 h-4',
-        md: 'w-5 h-5',
-        lg: 'w-6 h-6',
+        sm: 'w-3.5 h-3.5',
+        md: 'w-4 h-4',
+        lg: 'w-4.5 h-4.5',
     };
 
     return (
-        <div className={`flex items-center gap-3 flex-wrap ${className}`}>
+        <div className="flex flex-wrap items-center gap-3">
             {links.map((link) => {
-                const IconComponent = iconMap[link.platform?.toLowerCase()] || iconMap[link.icon?.toLowerCase()] || Globe;
+                const platformKey = link.platform?.toLowerCase() || '';
+                const IconComponent = iconMap[platformKey] || Globe;
 
                 return (
                     <a
-                        key={link.id || link.url}
+                        key={link.id || link.platform}
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`inline-flex items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-850 hover:bg-primary-100 dark:hover:bg-primary-950/60 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 border border-gray-200/80 dark:border-gray-800 transition-all duration-200 hover:scale-110 shadow-sm ${sizeClasses[size] || sizeClasses.md}`}
-                        title={link.label || link.platform}
                         aria-label={link.label || link.platform}
+                        className={`inline-flex items-center justify-center rounded-full border border-dark-600/80 bg-dark-800/60 text-gray-300 hover:text-accent-500 hover:border-accent-500/60 hover:bg-dark-700 transition-all ${sizeClasses[size] || sizeClasses.md}`}
                     >
                         <IconComponent className={iconSizes[size] || iconSizes.md} />
                     </a>

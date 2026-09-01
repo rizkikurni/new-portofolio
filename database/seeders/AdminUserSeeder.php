@@ -10,12 +10,12 @@ class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::firstOrCreate(
+        User::updateOrCreate(
             ['email' => 'admin@portfolio.test'],
             [
                 'name'              => 'Portfolio Admin',
                 'email'             => 'admin@portfolio.test',
-                'password'          => Hash::make('password'),
+                'password'          => 'password',
                 'email_verified_at' => now(),
             ]
         );
@@ -23,3 +23,4 @@ class AdminUserSeeder extends Seeder
         $this->command->info('Admin user created: admin@portfolio.test / password');
     }
 }
+

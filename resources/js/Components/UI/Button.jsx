@@ -1,60 +1,46 @@
+const variants = {
+    accent: 'bg-accent-500 hover:bg-accent-400 text-dark-900 font-bold',
+    dark: 'bg-dark-700 hover:bg-dark-600 text-white border border-dark-600',
+    ghost: 'bg-transparent hover:bg-dark-700 text-gray-300 hover:text-white',
+    link: 'bg-transparent text-accent-500 hover:text-accent-400 underline underline-offset-4 decoration-accent-500/50',
+};
+
+const sizes = {
+    sm: 'px-4 py-2 text-xs',
+    md: 'px-5 py-2.5 text-sm',
+    lg: 'px-6 py-3 text-sm',
+};
+
 export default function Button({
     children,
-    href,
-    variant = 'primary',
+    variant = 'accent',
     size = 'md',
-    className = '',
-    icon: Icon,
-    iconPosition = 'left',
+    href,
     external = false,
+    icon: Icon,
+    className = '',
     ...props
 }) {
-    const baseStyles =
-        'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-950 active:scale-[0.98]';
-
-    const variants = {
-        primary:
-            'bg-primary-600 hover:bg-primary-500 text-white shadow-lg shadow-primary-500/25 hover:shadow-primary-500/35 border border-primary-500/50',
-        secondary:
-            'bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-850 border border-gray-200 dark:border-gray-800 shadow-sm hover:border-gray-300 dark:hover:border-gray-700',
-        outline:
-            'bg-transparent text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-950/40 border border-primary-300 dark:border-primary-800',
-        ghost:
-            'bg-transparent text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white',
-    };
-
-    const sizes = {
-        sm: 'px-3.5 py-1.5 text-xs gap-1.5',
-        md: 'px-5 py-2.5 text-sm gap-2',
-        lg: 'px-6 py-3.5 text-base gap-2.5',
-    };
-
-    const combinedClasses = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
-
-    const content = (
-        <>
-            {Icon && iconPosition === 'left' && <Icon className="w-4 h-4 shrink-0" />}
-            <span>{children}</span>
-            {Icon && iconPosition === 'right' && <Icon className="w-4 h-4 shrink-0" />}
-        </>
-    );
+    const classes = `inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors ${variants[variant] || variants.accent} ${sizes[size] || sizes.md} ${className}`;
 
     if (href) {
         return (
             <a
                 href={href}
-                className={combinedClasses}
+                className={classes}
                 {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 {...props}
             >
-                {content}
+                {children}
+                {Icon && <Icon className="w-4 h-4" />}
             </a>
         );
     }
 
     return (
-        <button className={combinedClasses} {...props}>
-            {content}
+        <button className={classes} {...props}>
+            {children}
+            {Icon && <Icon className="w-4 h-4" />}
         </button>
     );
 }

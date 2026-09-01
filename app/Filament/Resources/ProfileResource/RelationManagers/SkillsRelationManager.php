@@ -7,6 +7,7 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class SkillsRelationManager extends RelationManager
 {
@@ -47,16 +48,16 @@ class SkillsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('category')
                     ->badge(),
 
-                Tables\Columns\TextColumn::make('pivot.sort_order')
+                Tables\Columns\TextColumn::make('sort_order')
                     ->label('Order')
-                    ->sortable(),
+                    ->sortable(query: fn (Builder $query, string $direction): Builder => $query->orderBy('profile_skill.sort_order', $direction)),
 
-                Tables\Columns\IconColumn::make('pivot.is_featured')
+                Tables\Columns\IconColumn::make('is_featured')
                     ->label('Featured')
                     ->boolean(),
             ])
-            ->defaultSort('pivot.sort_order')
-            ->reorderable('pivot.sort_order')
+            ->defaultSort('profile_skill.sort_order')
+            ->reorderable('sort_order')
             ->filters([])
             ->headerActions([
                 Tables\Actions\AttachAction::make()
@@ -83,3 +84,4 @@ class SkillsRelationManager extends RelationManager
             ]);
     }
 }
+

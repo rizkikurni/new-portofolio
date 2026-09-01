@@ -1,140 +1,284 @@
-import Button from '../UI/Button';
+import { ArrowRight } from 'lucide-react';
 import SocialLinks from './SocialLinks';
-import { ArrowDown, Send, Sparkles, MapPin, Code2, FolderGit2, Cpu } from 'lucide-react';
 
 export default function Hero({ profile = {}, socialLinks = [] }) {
+    const name = profile.name || 'Carlos Mendoza';
+    const title = profile.title || 'Product Designer and Developer';
+    const location = profile.location || 'California';
+
+    const rawIntro =
+        profile.tagline ||
+        profile.about ||
+        'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.';
+
+    const cleanIntro = rawIntro.replace(/<[^>]*>?/gm, '');
+
+    const nameParts = name.trim().split(' ');
+    const firstName = nameParts[0] || 'Carlos';
+    const lastName = nameParts.slice(1).join(' ') || 'Mendoza';
+
     return (
-        <section id="hero" className="relative pt-32 pb-20 md:pt-44 md:pb-28 overflow-hidden">
-            {/* Background Grid & Ambient Glows */}
-            <div className="absolute inset-0 bg-grid-pattern opacity-40 dark:opacity-20 pointer-events-none -z-10" />
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary-500/10 dark:bg-primary-500/15 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse-slow" />
-            <div className="absolute top-1/3 right-10 w-80 h-80 bg-indigo-500/10 dark:bg-indigo-500/15 rounded-full blur-3xl pointer-events-none -z-10" />
+        <section
+            id="hero"
+            className="
+                relative
+                overflow-hidden
+                bg-dark-800
+                pt-28
+                lg:min-h-[680px]
+                lg:pt-32
+            "
+        >
+            <div className="mx-auto max-w-7xl px-6 lg:px-10">
+                <div
+                    className="
+                        grid
+                        grid-cols-1
+                        lg:min-h-[550px]
+                        lg:grid-cols-12
+                        lg:gap-8
+                    "
+                >
+                    {/* LEFT AREA */}
+                    <div
+                        className="
+                            relative
+                            lg:col-span-7
+                            lg:min-h-[550px]
+                        "
+                    >
+                        {/* NAME + SOCIAL */}
+                        <div
+                            className="
+                                relative
+                                z-20
+                                flex
+                                flex-col
+                                items-center
+                                text-center
 
-            <div className="flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-16">
-                {/* Content Left */}
-                <div className="flex-1 text-center md:text-left space-y-6">
-                    {/* Status Badge with Live Pulse */}
-                    <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold shadow-sm animate-fade-in">
-                        <span className="relative flex h-2.5 w-2.5">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                        </span>
-                        <Sparkles className="w-3.5 h-3.5 text-primary-500" />
-                        <span>Available for Hire & Projects</span>
+                                lg:absolute
+                                lg:left-0
+                                lg:top-1/2
+                                lg:-translate-y-1/2
+                                lg:items-start
+                                lg:text-left
+                            "
+                        >
+                            <div className="hero-name">
+                                <h1
+                                    className="
+                                        font-display
+                                        text-5xl
+                                        font-extrabold
+                                        leading-[0.92]
+                                        tracking-[-0.04em]
+                                        text-white
+                                        sm:text-6xl
+                                        lg:text-[68px]
+                                    "
+                                >
+                                    <span className="block">
+                                        {firstName}
+                                    </span>
+
+                                    <span className="block">
+                                        {lastName}.
+                                    </span>
+                                </h1>
+
+                                {/* Accent */}
+                                <div
+                                    className="
+                                        hero-accent
+                                        mt-6
+                                        h-1
+                                        w-12
+                                        origin-left
+                                        bg-accent-500
+                                    "
+                                />
+
+                                {/* Social */}
+                                {socialLinks.length > 0 && (
+                                    <div className="hero-social mt-10">
+                                        <SocialLinks
+                                            links={socialLinks}
+                                            size="sm"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* PORTRAIT */}
+                        <div
+                            className="
+                                relative
+                                z-10
+                                mt-12
+                                flex
+                                justify-center
+
+                                lg:absolute
+                                lg:bottom-0
+                                lg:right-0
+                                lg:mt-0
+                                lg:h-full
+                                lg:w-[62%]
+                                lg:items-end
+                            "
+                        >
+                            {profile.avatar ? (
+                                <img
+                                    src={profile.avatar}
+                                    alt={profile.name || name}
+                                    className="
+                                        hero-photo
+                                        max-h-[430px]
+                                        w-auto
+                                        max-w-full
+                                        object-contain
+                                        object-bottom
+
+                                        sm:max-h-[500px]
+
+                                        lg:max-h-[590px]
+                                        lg:max-w-none
+                                    "
+                                />
+                            ) : (
+                                <div
+                                    className="
+                                        hero-photo
+                                        flex
+                                        h-[400px]
+                                        w-[280px]
+                                        items-center
+                                        justify-center
+                                        text-8xl
+                                        font-black
+                                        text-accent-500
+                                    "
+                                >
+                                    {firstName.charAt(0)}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
-                    {/* Headline */}
-                    <div className="space-y-3">
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1]">
-                            Hi, I'm <span className="text-gradient-primary">{profile.name || 'Developer'}</span>
-                        </h1>
-                        <p className="text-2xl sm:text-3xl font-display font-bold text-slate-700 dark:text-slate-300">
-                            {profile.title || 'Software Engineer'}
+                    {/* RIGHT AREA */}
+                    <div
+                        className="
+                            hero-intro
+                            relative
+                            z-20
+                            flex
+                            flex-col
+                            items-center
+                            py-16
+                            text-center
+
+                            lg:col-span-5
+                            lg:items-start
+                            lg:justify-center
+                            lg:py-0
+                            lg:pl-12
+                            lg:text-left
+                        "
+                    >
+                        {/* Introduction */}
+                        <div
+                            className="
+                                mb-4
+                                flex
+                                items-center
+                                gap-2
+                                text-[10px]
+                                font-medium
+                                uppercase
+                                tracking-[0.22em]
+                                text-gray-500
+                            "
+                        >
+                            <span className="h-px w-5 bg-gray-500" />
+                            <span>Introduction</span>
+                        </div>
+
+                        {/* Heading */}
+                        <h2
+                            className="
+                                max-w-[390px]
+                                text-xl
+                                font-semibold
+                                leading-[1.15]
+                                text-white
+                                sm:text-2xl
+                                lg:text-[28px]
+                            "
+                        >
+                            {title}
+
+                            {location && (
+                                <>
+                                    , based in
+                                    <br />
+                                    {location}.
+                                </>
+                            )}
+                        </h2>
+
+                        {/* Description */}
+                        <p
+                            className="
+                                mt-5
+                                max-w-[390px]
+                                text-sm
+                                leading-6
+                                text-gray-400
+                            "
+                        >
+                            {cleanIntro.length > 180
+                                ? `${cleanIntro.slice(0, 180)}...`
+                                : cleanIntro}
                         </p>
-                    </div>
 
-                    {/* Tagline */}
-                    {profile.tagline && (
-                        <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed font-sans">
-                            {profile.tagline}
-                        </p>
-                    )}
+                        {/* CTA */}
+                        <a
+                            href="#services"
+                            className="
+                                group
+                                mt-8
+                                inline-flex
+                                items-center
+                                gap-3
+                                text-sm
+                                font-semibold
+                                text-accent-500
+                                transition-colors
+                                hover:text-accent-400
+                            "
+                        >
+                            <span
+                                className="
+                                    border-b
+                                    border-accent-500/50
+                                    pb-1
+                                "
+                            >
+                                My story
+                            </span>
 
-                    {/* Location */}
-                    {profile.location && (
-                        <div className="flex items-center justify-center md:justify-start gap-2 text-sm font-medium text-slate-500 dark:text-slate-400 pt-1">
-                            <MapPin className="w-4 h-4 text-primary-500" />
-                            <span>Based in {profile.location}</span>
-                        </div>
-                    )}
-
-                    {/* CTAs */}
-                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-3">
-                        <Button href="#projects" variant="primary" size="lg" icon={ArrowDown} iconPosition="right">
-                            View Projects
-                        </Button>
-                        <Button href="#contact" variant="secondary" size="lg" icon={Send}>
-                            Get in Touch
-                        </Button>
-                    </div>
-
-                    {/* Stat Metrics Bar */}
-                    <div className="pt-6 border-t border-slate-200/80 dark:border-slate-800/80 grid grid-cols-3 gap-4 max-w-lg mx-auto md:mx-0">
-                        <div className="text-center md:text-left">
-                            <p className="text-2xl lg:text-3xl font-display font-bold text-slate-900 dark:text-white">
-                                5+
-                            </p>
-                            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
-                                Featured Projects
-                            </p>
-                        </div>
-                        <div className="text-center md:text-left">
-                            <p className="text-2xl lg:text-3xl font-display font-bold text-slate-900 dark:text-white">
-                                20+
-                            </p>
-                            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
-                                Tech Stack Skills
-                            </p>
-                        </div>
-                        <div className="text-center md:text-left">
-                            <p className="text-2xl lg:text-3xl font-display font-bold text-slate-900 dark:text-white">
-                                100%
-                            </p>
-                            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
-                                Dedicated Code
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Social Links */}
-                    {socialLinks && socialLinks.length > 0 && (
-                        <div className="pt-4">
-                            <SocialLinks links={socialLinks} size="md" />
-                        </div>
-                    )}
-                </div>
-
-                {/* Avatar / Visual Card Right */}
-                <div className="shrink-0 relative">
-                    <div className="relative group">
-                        {/* Glow Backdrop */}
-                        <div className="absolute -inset-1.5 bg-gradient-to-r from-primary-600 to-indigo-600 rounded-3xl blur-lg opacity-40 group-hover:opacity-70 transition duration-500" />
-
-                        {profile.avatar ? (
-                            <img
-                                src={profile.avatar}
-                                alt={profile.name}
-                                className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-2xl object-cover border-2 border-white dark:border-slate-800 shadow-2xl"
+                            <ArrowRight
+                                className="
+                                    h-4
+                                    w-4
+                                    transition-transform
+                                    duration-300
+                                    group-hover:translate-x-1
+                                "
                             />
-                        ) : (
-                            <div className="relative w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 flex items-center justify-center shadow-2xl">
-                                <span className="text-7xl font-display font-black text-gradient-primary">
-                                    {profile.name ? profile.name.charAt(0) : 'D'}
-                                </span>
-                            </div>
-                        )}
-
-                        {/* Floating Badge 1 */}
-                        <div className="absolute -top-4 -left-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 rounded-xl p-3 shadow-xl flex items-center gap-2.5 animate-float">
-                            <div className="w-8 h-8 rounded-lg bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-400 flex items-center justify-center">
-                                <Code2 className="w-4 h-4" />
-                            </div>
-                            <div>
-                                <p className="text-[11px] font-bold text-slate-900 dark:text-white">Clean Code</p>
-                                <p className="text-[10px] text-slate-500">Structured & Scalable</p>
-                            </div>
-                        </div>
-
-                        {/* Floating Badge 2 */}
-                        <div className="absolute -bottom-4 -right-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 rounded-xl p-3 shadow-xl flex items-center gap-2.5 animate-float" style={{ animationDelay: '2s' }}>
-                            <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                                <FolderGit2 className="w-4 h-4" />
-                            </div>
-                            <div>
-                                <p className="text-[11px] font-bold text-slate-900 dark:text-white">Architecture</p>
-                                <p className="text-[10px] text-slate-500">Best Practices</p>
-                            </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>

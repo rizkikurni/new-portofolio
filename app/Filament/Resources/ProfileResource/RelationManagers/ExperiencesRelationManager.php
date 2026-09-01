@@ -7,6 +7,7 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ExperiencesRelationManager extends RelationManager
 {
@@ -45,12 +46,12 @@ class ExperiencesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('position')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('pivot.sort_order')
+                Tables\Columns\TextColumn::make('sort_order')
                     ->label('Order')
-                    ->sortable(),
+                    ->sortable(query: fn (Builder $query, string $direction): Builder => $query->orderBy('profile_experience.sort_order', $direction)),
             ])
-            ->defaultSort('pivot.sort_order')
-            ->reorderable('pivot.sort_order')
+            ->defaultSort('profile_experience.sort_order')
+            ->reorderable('sort_order')
             ->filters([])
             ->headerActions([
                 Tables\Actions\AttachAction::make()
@@ -74,3 +75,4 @@ class ExperiencesRelationManager extends RelationManager
             ]);
     }
 }
+

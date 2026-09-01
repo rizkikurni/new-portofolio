@@ -1,59 +1,129 @@
-import Section from '../UI/Section';
-import Button from '../UI/Button';
-import SocialLinks from './SocialLinks';
-import { Mail, MessageSquare, Send, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { Send, CheckCircle2, ArrowRight } from 'lucide-react';
 
 export default function Contact({ profile = {}, socialLinks = [] }) {
-    const email = profile.email || 'hello@example.com';
+    const [form, setForm] = useState({ name: '', email: '', message: '' });
+    const [submitted, setSubmitted] = useState(false);
+    const email = profile.email || 'hi@carlos.com';
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Construct mailto link
+        const subject = encodeURIComponent(`Project Inquiry from ${form.name || 'Website Visitor'}`);
+        const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`);
+        window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+        setSubmitted(true);
+    };
 
     return (
-        <Section id="contact" className="relative overflow-hidden">
-            <div className="relative rounded-3xl p-8 sm:p-12 lg:p-16 text-white text-center shadow-2xl overflow-hidden bg-slate-900 dark:bg-slate-900 border border-slate-800">
-                {/* Gradient Glow Backdrops */}
-                <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary-600/30 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-32 right-10 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
-
-                <div className="relative z-10 max-w-2xl mx-auto space-y-6">
-                    {/* Icon Badge */}
-                    <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/15 text-white flex items-center justify-center mx-auto shadow-inner">
-                        <MessageSquare className="w-7 h-7" />
+        <section id="contact" className="py-16 md:py-24 border-t border-dark-600/40">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+                {/* 1. Left Side: Direct Contact Details */}
+                <div className="lg:col-span-5 space-y-6">
+                    <div className="dash-tag">
+                        <span>—</span>
+                        <span>Contact</span>
                     </div>
 
-                    {/* Header */}
-                    <div className="space-y-2">
-                        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary-500/20 border border-primary-400/30 text-primary-300 text-xs font-semibold uppercase tracking-wider">
-                            <Sparkles className="w-3.5 h-3.5" />
-                            Get In Touch
-                        </span>
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold tracking-tight pt-2">
-                            Let's Work Together
-                        </h2>
-                    </div>
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
+                        Estimate your project? Let me know here.
+                    </h2>
 
-                    <p className="text-slate-300 text-base md:text-lg leading-relaxed font-sans">
-                        Have a project in mind, an opportunity to discuss, or just want to connect? Send an email or reach out on social media.
+                    <p className="text-sm text-gray-400 leading-relaxed max-w-md">
+                        Have a new idea, an existing project in need of overhaul, or want to discuss engineering & design? Feel free to reach out directly.
                     </p>
 
-                    <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <Button
-                            href={`mailto:${email}`}
-                            variant="primary"
-                            size="lg"
-                            icon={Mail}
-                            className="w-full sm:w-auto bg-white text-slate-950 hover:bg-slate-100 shadow-xl border-none font-bold"
-                        >
-                            {email}
-                        </Button>
-                    </div>
-
-                    {/* Social Links Footer inside Contact */}
-                    {socialLinks && socialLinks.length > 0 && (
-                        <div className="pt-8 border-t border-white/10 flex justify-center">
-                            <SocialLinks links={socialLinks} size="md" />
+                    <div className="pt-4 space-y-3">
+                        <div className="text-xs uppercase tracking-wider font-mono text-gray-500">
+                            Direct Email
                         </div>
+                        <a
+                            href={`mailto:${email}`}
+                            className="inline-flex items-center gap-2 text-lg sm:text-xl font-bold text-accent-500 hover:text-accent-400 group transition-colors"
+                        >
+                            <span>{email}</span>
+                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        </a>
+                    </div>
+                </div>
+
+                {/* 2. Right Side: Minimalist Underline Form */}
+                <div className="lg:col-span-7 bg-dark-700 border border-dark-600/80 rounded-3xl p-8 sm:p-12">
+                    {submitted ? (
+                        <div className="text-center py-10 space-y-4">
+                            <div className="w-14 h-14 rounded-full bg-accent-500/10 text-accent-500 flex items-center justify-center mx-auto">
+                                <CheckCircle2 className="w-8 h-8" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-white">
+                                Message Prepared!
+                            </h3>
+                            <p className="text-sm text-gray-400 max-w-sm mx-auto">
+                                Your email client has been opened with your inquiry details.
+                            </p>
+                            <button
+                                onClick={() => setSubmitted(false)}
+                                className="text-xs font-semibold text-accent-500 hover:underline pt-2"
+                            >
+                                Send another message
+                            </button>
+                        </div>
+                    ) : (
+                        <form onSubmit={handleSubmit} className="space-y-8">
+                            <div>
+                                <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+                                    What's your name?
+                                </label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={form.name}
+                                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                                    placeholder="Jane Doe"
+                                    className="w-full bg-transparent border-b border-dark-500 pb-3 text-white placeholder-gray-600 focus:outline-none focus:border-accent-500 transition-colors text-base"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+                                    Your fancy email
+                                </label>
+                                <input
+                                    type="email"
+                                    required
+                                    value={form.email}
+                                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                                    placeholder="jane@company.com"
+                                    className="w-full bg-transparent border-b border-dark-500 pb-3 text-white placeholder-gray-600 focus:outline-none focus:border-accent-500 transition-colors text-base"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+                                    Tell me about your project...
+                                </label>
+                                <textarea
+                                    rows="3"
+                                    required
+                                    value={form.message}
+                                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                                    placeholder="Project objectives, timelines, scope..."
+                                    className="w-full bg-transparent border-b border-dark-500 pb-3 text-white placeholder-gray-600 focus:outline-none focus:border-accent-500 transition-colors text-base resize-none"
+                                />
+                            </div>
+
+                            <div className="pt-2">
+                                <button
+                                    type="submit"
+                                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-accent-500 hover:bg-accent-400 text-dark-900 font-bold text-sm tracking-wide transition-colors"
+                                >
+                                    <span>Send Inquiry</span>
+                                    <Send className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </form>
                     )}
                 </div>
             </div>
-        </Section>
+        </section>
     );
 }
