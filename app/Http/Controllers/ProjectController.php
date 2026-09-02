@@ -17,7 +17,10 @@ class ProjectController extends Controller
         $project = Project::query()
             ->where('slug', $slug)
             ->active()
-            ->with(['skills' => fn ($q) => $q->orderBy('project_skill.sort_order')])
+            ->with([
+                'skills' => fn ($q) => $q->orderBy('project_skill.sort_order'),
+                'media',
+            ])
             ->firstOrFail();
 
         $socialLinks = SocialLink::query()
@@ -38,6 +41,10 @@ class ProjectController extends Controller
                 'title'             => $project->title,
                 'short_description' => $project->short_description,
                 'description'       => $project->description,
+                'role'              => $project->role,
+                'challenge'         => $project->challenge,
+                'solution'          => $project->solution,
+                'impact'            => $project->impact,
                 'thumbnail'         => $project->thumbnail ? asset('storage/' . $project->thumbnail) : null,
                 'github_url'        => $project->github_url,
                 'demo_url'          => $project->demo_url,
@@ -49,6 +56,14 @@ class ProjectController extends Controller
                     'name'     => $s->name,
                     'category' => $s->category,
                     'icon'     => $s->icon,
+                ]),
+                'media'             => $project->media->map(fn ($media) => [
+                    'id'         => $media->id,
+                    'url'        => asset('storage/' . $media->file_path),
+                    'type'       => $media->media_type,
+                    'alt_text'   => $media->alt_text,
+                    'caption'    => $media->caption,
+                    'sort_order' => $media->sort_order,
                 ]),
             ],
             'social_links' => $socialLinks,

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -36,6 +36,11 @@
         color: var(--text-secondary);
     }
 
+    body,
+    #app {
+        min-height: 100%;
+    }
+
     h1,
     h2,
     h3,
@@ -60,6 +65,35 @@
     .card-accent {
         @apply rounded-2xl bg-accent-500 text-dark-900;
     }
+
+    .portfolio-prose > * + * {
+        @apply mt-4;
+    }
+
+    .portfolio-prose ul {
+        @apply list-disc space-y-2 pl-5;
+    }
+
+    .portfolio-prose ol {
+        @apply list-decimal space-y-2 pl-5;
+    }
+
+    .portfolio-prose a {
+        @apply font-semibold text-accent-500 underline decoration-accent-500 underline-offset-4;
+        text-decoration-color: color-mix(in srgb, var(--accent-500) 40%, transparent);
+    }
+
+    .portfolio-prose strong {
+        @apply font-bold text-white;
+    }
+}
+
+.hero-grid {
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(to bottom, black, transparent 88%);
 }
 
 /* ==========================================================================

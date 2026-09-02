@@ -1,164 +1,124 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { ArrowLeft, ArrowUpRight, Calendar, CheckCircle2, Code2, Github } from 'lucide-react';
 import Navbar from '../../Components/Layout/Navbar';
 import Footer from '../../Components/Layout/Footer';
 import Container from '../../Components/Layout/Container';
-import Badge from '../../Components/UI/Badge';
-import Button from '../../Components/UI/Button';
 
-import {
-    ArrowLeft,
-    Github,
-    ExternalLink,
-    Calendar,
-    Code2,
-    CheckCircle2,
-} from 'lucide-react';
+const caseStudySections = [
+    { key: 'challenge', eyebrow: 'The challenge', title: 'What needed to be solved' },
+    { key: 'solution', eyebrow: 'The solution', title: 'How I approached it' },
+    { key: 'impact', eyebrow: 'The outcome', title: 'What the project achieved' },
+];
 
 export default function Show({ project = {}, social_links = [] }) {
+    const hasCaseStudy = caseStudySections.some(({ key }) => project[key]);
+
     return (
-        <div className="min-h-screen bg-dark-900 text-gray-300 font-sans antialiased selection:bg-accent-500/20 selection:text-accent-400">
-            {/* Dynamic SEO Meta Tags */}
+        <div className="min-h-screen overflow-x-hidden bg-dark-900 font-sans text-gray-300 antialiased selection:bg-accent-500/25 selection:text-white">
             <Head>
-                <title>{`${project.title} — Project Details`}</title>
+                <title>{`${project.title || 'Project'} — Case Study`}</title>
                 <meta name="description" content={project.short_description || ''} />
             </Head>
 
-            {/* Navbar */}
-            <Navbar title="Portfolio" />
+            <Navbar title="Portfolio" homeUrl="/" />
 
-            <main className="pt-28 pb-20 md:pt-36 md:pb-28">
+            <main className="pt-32 sm:pt-36">
                 <Container>
-                    {/* Back Link */}
-                    <div className="mb-8">
-                        <a
-                            href="/"
-                            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-400 hover:text-accent-500 transition-colors group"
-                        >
-                            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                            <span>Back to Portfolio</span>
-                        </a>
-                    </div>
+                    <Link href="/" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-gray-400 transition-colors hover:text-white">
+                        <ArrowLeft className="h-4 w-4" /> Back to portfolio
+                    </Link>
 
-                    {/* Header */}
-                    <div className="space-y-4 max-w-3xl">
-                        <div className="flex flex-wrap items-center gap-3">
-                            {project.status && (
-                                <Badge
-                                    variant={project.status === 'completed' ? 'accent' : 'dark'}
-                                    className="capitalize px-3 py-1"
-                                >
-                                    <CheckCircle2 className="w-3.5 h-3.5" />
-                                    <span>{project.status}</span>
-                                </Badge>
-                            )}
-
-                            {(project.start_date || project.end_date) && (
-                                <span className="inline-flex items-center gap-1.5 text-xs font-mono text-gray-500">
-                                    <Calendar className="w-3.5 h-3.5" />
-                                    {project.start_date} {project.end_date ? `– ${project.end_date}` : '– Present'}
-                                </span>
-                            )}
+                    <header className="grid gap-10 py-14 lg:grid-cols-[1fr_0.42fr] lg:items-end lg:gap-20 lg:py-20">
+                        <div>
+                            <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.14em] text-accent-500">
+                                {project.role && <span>{project.role}</span>}
+                                {project.role && project.status && <span className="h-1 w-1 rounded-full bg-gray-600" />}
+                                {project.status && <span className="capitalize text-gray-400">{project.status}</span>}
+                            </div>
+                            <h1 className="mt-5 max-w-5xl text-5xl font-extrabold leading-[1.02] tracking-[-0.055em] text-white sm:text-6xl lg:text-7xl">{project.title}</h1>
+                            <p className="mt-7 max-w-3xl text-lg leading-8 text-gray-400 sm:text-xl">{project.short_description}</p>
                         </div>
 
-                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white font-display">
-                            {project.title}
-                        </h1>
+                        <div className="space-y-5 border-l border-white/10 pl-6">
+                            {(project.start_date || project.end_date) && (
+                                <div>
+                                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">Timeline</p>
+                                    <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-white"><Calendar className="h-4 w-4 text-accent-500" /> {project.start_date || '—'} — {project.end_date || 'Present'}</p>
+                                </div>
+                            )}
+                            {project.skills?.length > 0 && (
+                                <div>
+                                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">Core stack</p>
+                                    <p className="mt-2 text-sm font-semibold leading-6 text-white">{project.skills.slice(0, 5).map((skill) => skill.name).join(' · ')}</p>
+                                </div>
+                            )}
+                        </div>
+                    </header>
 
-                        <p className="text-lg md:text-xl text-gray-400 leading-relaxed">
-                            {project.short_description}
-                        </p>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex flex-wrap items-center gap-4 mt-8">
-                        {project.demo_url && (
-                            <Button
-                                href={project.demo_url}
-                                variant="accent"
-                                size="lg"
-                                icon={ExternalLink}
-                                external
-                            >
-                                Live Demo
-                            </Button>
-                        )}
-                        {project.github_url && (
-                            <Button
-                                href={project.github_url}
-                                variant="dark"
-                                size="lg"
-                                icon={Github}
-                                external
-                            >
-                                GitHub Repository
-                            </Button>
-                        )}
-                    </div>
-
-                    {/* Thumbnail Banner */}
-                    <div className="mt-12 rounded-3xl overflow-hidden border border-dark-600/80 bg-dark-800 aspect-video max-h-[500px] w-full shadow-2xl">
+                    <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-dark-800">
                         {project.thumbnail ? (
-                            <img
-                                src={project.thumbnail}
-                                alt={project.title}
-                                className="w-full h-full object-cover"
-                            />
+                            <img src={project.thumbnail} alt={`${project.title} preview`} className="aspect-video w-full object-cover" />
                         ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-dark-700 to-dark-800">
-                                <span className="text-6xl font-black text-dark-600 tracking-widest font-display">
-                                    {project.title ? project.title.substring(0, 2).toUpperCase() : 'PR'}
-                                </span>
+                            <div className="flex aspect-video items-center justify-center bg-[radial-gradient(circle_at_30%_20%,rgba(255,112,77,0.18),transparent_35%),linear-gradient(145deg,#292b31,#18191d)]">
+                                <span className="text-8xl font-black tracking-[-0.08em] text-white/10">{project.title?.slice(0, 2).toUpperCase() || 'PR'}</span>
                             </div>
                         )}
                     </div>
 
-                    {/* Main Content Grid */}
-                    <div className="mt-14 grid grid-cols-1 lg:grid-cols-3 gap-12">
-                        {/* Description Body Left */}
-                        <div className="lg:col-span-2 space-y-6">
-                            <h2 className="text-2xl font-bold text-white">
-                                About the Project
-                            </h2>
-
-                            {project.description ? (
-                                <div
-                                    className="prose prose-invert max-w-none text-gray-300 leading-relaxed space-y-4"
-                                    dangerouslySetInnerHTML={{ __html: project.description }}
-                                />
-                            ) : (
-                                <p className="text-gray-400">
-                                    {project.short_description}
-                                </p>
+                    <div className="grid gap-14 py-20 lg:grid-cols-[1fr_0.38fr] lg:gap-20 lg:py-28">
+                        <div className="space-y-16">
+                            {project.description && (
+                                <section>
+                                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent-500">Overview</p>
+                                    <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white">About the project</h2>
+                                    <div className="portfolio-prose mt-6 text-base leading-8 text-gray-300" dangerouslySetInnerHTML={{ __html: project.description }} />
+                                </section>
                             )}
+
+                            {hasCaseStudy && caseStudySections.map(({ key, eyebrow, title }) => project[key] && (
+                                <section key={key} className="border-t border-white/10 pt-10">
+                                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent-500">{eyebrow}</p>
+                                    <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white">{title}</h2>
+                                    <div className="portfolio-prose mt-6 text-base leading-8 text-gray-300" dangerouslySetInnerHTML={{ __html: project[key] }} />
+                                </section>
+                            ))}
                         </div>
 
-                        {/* Sidebar Right */}
-                        <div className="space-y-6">
-                            {/* Technologies Card */}
-                            {project.skills && project.skills.length > 0 && (
-                                <div className="bg-dark-700 border border-dark-600/80 rounded-3xl p-6 sm:p-8">
-                                    <div className="flex items-center gap-2 mb-4 pb-3 border-b border-dark-600/60">
-                                        <Code2 className="w-5 h-5 text-accent-500" />
-                                        <h3 className="font-bold text-white">
-                                            Technologies Used
-                                        </h3>
-                                    </div>
-
-                                    <div className="flex flex-wrap gap-2">
-                                        {project.skills.map((sk) => (
-                                            <Badge key={sk.id} variant="dark">
-                                                {sk.name}
-                                            </Badge>
-                                        ))}
-                                    </div>
+                        <aside className="h-fit rounded-3xl border border-white/10 bg-dark-800 p-6 lg:sticky lg:top-28">
+                            <div className="flex items-center gap-2 border-b border-white/10 pb-4">
+                                <Code2 className="h-5 w-5 text-accent-500" />
+                                <h2 className="font-bold text-white">Project details</h2>
+                            </div>
+                            {project.skills?.length > 0 && (
+                                <div className="mt-5 flex flex-wrap gap-2">
+                                    {project.skills.map((skill) => <span key={skill.id} className="rounded-lg bg-white/5 px-2.5 py-1.5 text-xs font-medium text-gray-300">{skill.name}</span>)}
                                 </div>
                             )}
-                        </div>
+                            <div className="mt-6 space-y-3">
+                                {project.demo_url && <a href={project.demo_url} target="_blank" rel="noopener noreferrer" className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-accent-500 px-4 py-3 text-sm font-bold text-dark-900 transition-colors hover:bg-accent-400">View live project <ArrowUpRight className="h-4 w-4" /></a>}
+                                {project.github_url && <a href={project.github_url} target="_blank" rel="noopener noreferrer" className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-white/5"><Github className="h-4 w-4" /> View source code</a>}
+                            </div>
+                            {project.status && <p className="mt-5 flex items-center gap-2 text-xs font-medium capitalize text-gray-400"><CheckCircle2 className="h-4 w-4 text-accent-500" /> {project.status}</p>}
+                        </aside>
                     </div>
+
+                    {project.media?.length > 0 && (
+                        <section className="border-t border-white/10 py-20 md:py-28">
+                            <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent-500">Gallery</p>
+                            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">A closer look at the product.</h2>
+                            <div className="mt-10 grid gap-6 md:grid-cols-2">
+                                {project.media.map((media, index) => (
+                                    <figure key={media.id} className={`${index === 0 ? 'md:col-span-2' : ''} overflow-hidden rounded-3xl border border-white/10 bg-dark-800`}>
+                                        <img src={media.url} alt={media.alt_text || `${project.title} screenshot ${index + 1}`} loading="lazy" className="w-full object-cover" />
+                                        {media.caption && <figcaption className="border-t border-white/10 px-5 py-4 text-sm text-gray-400">{media.caption}</figcaption>}
+                                    </figure>
+                                ))}
+                            </div>
+                        </section>
+                    )}
                 </Container>
             </main>
 
-            {/* Footer */}
             <Footer socialLinks={social_links} />
         </div>
     );

@@ -1,63 +1,42 @@
+import { ArrowUpRight, BriefcaseBusiness } from 'lucide-react';
 import Section from '../UI/Section';
-import { ArrowRight } from 'lucide-react';
 
 export default function Experience({ experiences = [] }) {
-    if (!experiences || experiences.length === 0) return null;
+    if (!experiences.length) return null;
 
     return (
-        <Section
-            id="experience"
-            tag="Experience"
-            title="Work Experience & Career."
-            subtitle="Professional track record and roles contributing to high-impact products and teams."
-        >
-            <div className="border-t border-dark-600/60 divide-y divide-dark-600/60">
-                {experiences.map((exp) => (
-                    <div
-                        key={exp.id}
-                        className="py-6 sm:py-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
-                    >
-                        {/* Date Range / Tag */}
-                        <div className="sm:w-1/4">
-                            <span className="text-xs font-mono font-medium text-gray-500">
-                                {exp.start_date} — {exp.end_date}
-                            </span>
-                        </div>
-
-                        {/* Position & Company */}
-                        <div className="sm:w-1/2">
-                            <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-accent-500 transition-colors">
-                                {exp.position}
-                            </h3>
-                            <p className="text-sm text-gray-400 mt-0.5">
-                                {exp.company}
-                            </p>
-                            {exp.description && (
-                                <p className="text-xs text-gray-500 mt-2 line-clamp-2 leading-relaxed">
-                                    {exp.description}
-                                </p>
-                            )}
-                        </div>
-
-                        {/* Arrow Link Action */}
-                        <div className="sm:w-1/4 flex sm:justify-end items-center">
-                            {exp.company_url ? (
-                                <a
-                                    href={exp.company_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 text-xs font-semibold text-accent-500 hover:text-accent-400 group/btn transition-colors"
-                                >
-                                    <span>Visit</span>
-                                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                                </a>
-                            ) : (
-                                <div className="w-8 h-8 rounded-full bg-dark-800 flex items-center justify-center text-gray-600 group-hover:text-accent-500 transition-colors">
-                                    <ArrowRight className="w-4 h-4" />
+        <Section id="experience" tag="Experience" title="The work behind the skills." subtitle="Roles, responsibilities, and contributions that shaped how I build software.">
+            <div className="relative border-l border-white/10 pl-6 sm:pl-9">
+                {experiences.map((experience, index) => (
+                    <article key={experience.id} className={`${index === 0 ? 'pb-12' : 'py-12'} relative border-b border-white/8 last:border-0 last:pb-0`}>
+                        <span className="absolute -left-[31px] top-1.5 flex h-3 w-3 rounded-full border-2 border-dark-900 bg-accent-500 sm:-left-[43px]" />
+                        <div className="grid gap-5 md:grid-cols-[0.33fr_1fr] md:gap-10">
+                            <div>
+                                <p className="font-mono text-xs text-gray-500">{experience.start_date} — {experience.end_date}</p>
+                                {experience.is_current && (
+                                    <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-accent-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-accent-400">
+                                        <BriefcaseBusiness className="h-3 w-3" /> Current
+                                    </span>
+                                )}
+                            </div>
+                            <div>
+                                <div className="flex items-start justify-between gap-5">
+                                    <div>
+                                        <h3 className="text-xl font-extrabold text-white sm:text-2xl">{experience.position}</h3>
+                                        <p className="mt-1 text-sm font-semibold text-gray-400">{experience.company}</p>
+                                    </div>
+                                    {experience.company_url && (
+                                        <a href={experience.company_url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${experience.company}`} className="rounded-full border border-white/10 p-2.5 text-gray-400 transition-colors hover:border-accent-500/40 hover:text-accent-500">
+                                            <ArrowUpRight className="h-4 w-4" />
+                                        </a>
+                                    )}
                                 </div>
-                            )}
+                                {experience.description && (
+                                    <p className="mt-5 max-w-3xl whitespace-pre-line text-sm leading-7 text-gray-400">{experience.description}</p>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    </article>
                 ))}
             </div>
         </Section>

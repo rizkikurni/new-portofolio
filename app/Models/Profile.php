@@ -18,6 +18,8 @@ class Profile extends Model
         'email',
         'phone',
         'avatar',
+        'resume_path',
+        'resume_label',
         'meta_title',
         'meta_description',
         'og_image',

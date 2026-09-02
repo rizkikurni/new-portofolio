@@ -1,285 +1,622 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Download, Mail } from 'lucide-react';
 import SocialLinks from './SocialLinks';
 
-export default function Hero({ profile = {}, socialLinks = [] }) {
-    const name = profile.name || 'Carlos Mendoza';
-    const title = profile.title || 'Product Designer and Developer';
-    const location = profile.location || 'California';
+export default function Hero({
+    profile = {},
+    socialLinks = [],
+    hasProjects = false,
+}) {
+    const name = profile.name || 'Your Name';
+    const title = profile.title || 'Developer';
+    const location = profile.location || '';
 
     const rawIntro =
         profile.tagline ||
         profile.about ||
-        'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.';
+        'I build thoughtful digital products with clean code and a focus on real user needs.';
 
-    const cleanIntro = rawIntro.replace(/<[^>]*>?/gm, '');
+    const cleanIntro = rawIntro
+        .replace(/<[^>]*>?/gm, '')
+        .replace(/\s+/g, ' ')
+        .trim();
 
-    const nameParts = name.trim().split(' ');
-    const firstName = nameParts[0] || 'Carlos';
-    const lastName = nameParts.slice(1).join(' ') || 'Mendoza';
+    const nameParts = name.trim().split(' ').filter(Boolean);
+
+    const firstName = nameParts[0] || 'Your';
+    const lastName = nameParts.slice(1).join(' ');
 
     return (
         <section
             id="hero"
             className="
                 relative
+                min-h-[100svh]
                 overflow-hidden
+                border-b
+                border-white/5
                 bg-dark-800
-                pt-28
-                lg:min-h-[680px]
-                lg:pt-32
             "
         >
-            <div className="mx-auto max-w-7xl px-6 lg:px-10">
+            {/* Background */}
+            <div className="pointer-events-none absolute inset-0">
                 <div
                     className="
+                        absolute
+                        left-[45%]
+                        top-[45%]
+                        h-[450px]
+                        w-[450px]
+                        -translate-x-1/2
+                        -translate-y-1/2
+                        rounded-full
+                        bg-accent-500/[0.04]
+                        blur-[120px]
+                    "
+                />
+
+                <div className="hero-grid absolute inset-0 opacity-[0.08]" />
+            </div>
+
+            {/* ========================= */}
+            {/* DESKTOP */}
+            {/* ========================= */}
+            <div
+                className="
+                    relative
+                    mx-auto
+                    hidden
+                    min-h-[100svh]
+                    w-full
+                    max-w-[1600px]
+                    px-[6%]
+                    lg:block
+                "
+            >
+                <div
+                    className="
+                        relative
                         grid
-                        grid-cols-1
-                        lg:min-h-[550px]
-                        lg:grid-cols-12
-                        lg:gap-8
+                        min-h-[100svh]
+                        grid-cols-12
+                        items-center
                     "
                 >
-                    {/* LEFT AREA */}
+                    {/* ========================= */}
+                    {/* LEFT */}
+                    {/* ========================= */}
                     <div
                         className="
                             relative
-                            lg:col-span-7
-                            lg:min-h-[550px]
+                            z-30
+                            col-span-5
+                            flex
+                            items-center
                         "
                     >
-                        {/* NAME + SOCIAL */}
-                        <div
-                            className="
-                                relative
-                                z-20
-                                flex
-                                flex-col
-                                items-center
-                                text-center
+                        <div className="-translate-y-4">
+                            <h1
+                                className="
+                                    hero-name
+                                    font-display
+                                    text-[clamp(4.8rem,6.2vw,7rem)]
+                                    font-extrabold
+                                    leading-[0.82]
+                                    tracking-[-0.06em]
+                                    text-white
+                                "
+                            >
+                                <span className="block">
+                                    {firstName}
+                                </span>
 
-                                lg:absolute
-                                lg:left-0
-                                lg:top-1/2
-                                lg:-translate-y-1/2
-                                lg:items-start
-                                lg:text-left
-                            "
-                        >
-                            <div className="hero-name">
-                                <h1
-                                    className="
-                                        font-display
-                                        text-5xl
-                                        font-extrabold
-                                        leading-[0.92]
-                                        tracking-[-0.04em]
-                                        text-white
-                                        sm:text-6xl
-                                        lg:text-[68px]
-                                    "
-                                >
-                                    <span className="block">
-                                        {firstName}
-                                    </span>
-
+                                {lastName && (
                                     <span className="block">
                                         {lastName}.
                                     </span>
-                                </h1>
-
-                                {/* Accent */}
-                                <div
-                                    className="
-                                        hero-accent
-                                        mt-6
-                                        h-1
-                                        w-12
-                                        origin-left
-                                        bg-accent-500
-                                    "
-                                />
-
-                                {/* Social */}
-                                {socialLinks.length > 0 && (
-                                    <div className="hero-social mt-10">
-                                        <SocialLinks
-                                            links={socialLinks}
-                                            size="sm"
-                                        />
-                                    </div>
                                 )}
-                            </div>
-                        </div>
+                            </h1>
 
-                        {/* PORTRAIT */}
-                        <div
-                            className="
-                                relative
-                                z-10
-                                mt-12
-                                flex
-                                justify-center
+                            {/* Accent */}
+                            <div
+                                className="
+                                    hero-accent
+                                    mt-8
+                                    h-[5px]
+                                    w-16
+                                    bg-accent-500
+                                "
+                            />
 
-                                lg:absolute
-                                lg:bottom-0
-                                lg:right-0
-                                lg:mt-0
-                                lg:h-full
-                                lg:w-[62%]
-                                lg:items-end
-                            "
-                        >
-                            {profile.avatar ? (
-                                <img
-                                    src={profile.avatar}
-                                    alt={profile.name || name}
-                                    className="
-                                        hero-photo
-                                        max-h-[430px]
-                                        w-auto
-                                        max-w-full
-                                        object-contain
-                                        object-bottom
-
-                                        sm:max-h-[500px]
-
-                                        lg:max-h-[590px]
-                                        lg:max-w-none
-                                    "
-                                />
-                            ) : (
-                                <div
-                                    className="
-                                        hero-photo
-                                        flex
-                                        h-[400px]
-                                        w-[280px]
-                                        items-center
-                                        justify-center
-                                        text-8xl
-                                        font-black
-                                        text-accent-500
-                                    "
-                                >
-                                    {firstName.charAt(0)}
+                            {/* Social */}
+                            {socialLinks.length > 0 && (
+                                <div className="hero-social mt-12">
+                                    <SocialLinks
+                                        links={socialLinks}
+                                        size="md"
+                                    />
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    {/* RIGHT AREA */}
+                    {/* Empty middle */}
+                    <div className="col-span-3" />
+
+                    {/* ========================= */}
+                    {/* RIGHT */}
+                    {/* ========================= */}
                     <div
                         className="
                             hero-intro
                             relative
-                            z-20
+                            z-30
+                            col-span-4
                             flex
-                            flex-col
                             items-center
-                            py-16
-                            text-center
-
-                            lg:col-span-5
-                            lg:items-start
-                            lg:justify-center
-                            lg:py-0
-                            lg:pl-12
-                            lg:text-left
+                            pl-4
+                            xl:pl-8
                         "
                     >
-                        {/* Introduction */}
+                        <div className="max-w-[430px]">
+                            {/* Label */}
+                            <div
+                                className="
+                                    mb-5
+                                    flex
+                                    items-center
+                                    gap-3
+                                    text-[10px]
+                                    font-semibold
+                                    uppercase
+                                    tracking-[0.28em]
+                                    text-gray-500
+                                "
+                            >
+                                <span className="h-px w-7 bg-gray-600" />
+
+                                <span>
+                                    Introduction
+                                </span>
+                            </div>
+
+                            {/* Title */}
+                            <h2
+                                className="
+                                    font-display
+                                    text-[clamp(1.8rem,2.15vw,2.6rem)]
+                                    font-semibold
+                                    leading-[1.07]
+                                    tracking-[-0.035em]
+                                    text-white
+                                "
+                            >
+                                {title}
+
+                                {location && (
+                                    <>
+                                        <span>, based in</span>
+
+                                        <br />
+
+                                        <span>
+                                            {location}.
+                                        </span>
+                                    </>
+                                )}
+                            </h2>
+
+                            {/* Description */}
+                            <p
+                                className="
+                                    mt-7
+                                    max-w-[400px]
+                                    text-[14px]
+                                    leading-7
+                                    text-gray-400
+                                "
+                            >
+                                {cleanIntro.length > 180
+                                    ? `${cleanIntro.slice(0, 180)}...`
+                                    : cleanIntro}
+                            </p>
+
+                            {/* Actions */}
+                            <div
+                                className="
+                                    mt-8
+                                    flex
+                                    flex-wrap
+                                    items-center
+                                    gap-6
+                                "
+                            >
+                                {hasProjects && (
+                                    <a
+                                        href="#projects"
+                                        className="
+                                            group
+                                            inline-flex
+                                            items-center
+                                            gap-3
+                                            border-b
+                                            border-accent-500
+                                            pb-1.5
+                                            text-sm
+                                            font-semibold
+                                            text-accent-500
+                                            transition-colors
+                                            duration-300
+                                            hover:text-accent-400
+                                        "
+                                    >
+                                        My story
+
+                                        <ArrowRight
+                                            className="
+                                                h-4
+                                                w-4
+                                                transition-transform
+                                                duration-300
+                                                group-hover:translate-x-1
+                                            "
+                                        />
+                                    </a>
+                                )}
+
+                                {profile.resume_url && (
+                                    <a
+                                        href={profile.resume_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="
+                                            inline-flex
+                                            items-center
+                                            gap-2
+                                            text-sm
+                                            font-medium
+                                            text-gray-500
+                                            transition-colors
+                                            duration-300
+                                            hover:text-white
+                                        "
+                                    >
+                                        <Download className="h-4 w-4" />
+
+                                        {profile.resume_label ||
+                                            'Download CV'}
+                                    </a>
+                                )}
+                            </div>
+
+                            {/* Email */}
+                            {profile.email && (
+                                <a
+                                    href={`mailto:${profile.email}`}
+                                    className="
+                                        mt-8
+                                        inline-flex
+                                        items-center
+                                        gap-2
+                                        text-xs
+                                        font-medium
+                                        text-gray-500
+                                        transition-colors
+                                        duration-300
+                                        hover:text-white
+                                    "
+                                >
+                                    <Mail className="h-4 w-4 text-accent-500" />
+
+                                    {profile.email}
+                                </a>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* ========================= */}
+                {/* PHOTO */}
+                {/* ========================= */}
+                <div
+                    className="
+                        pointer-events-none
+                        absolute
+                        bottom-0
+                        left-[47%]
+                        z-20
+                        flex
+                        h-[88%]
+                        -translate-x-1/2
+                        items-end
+                        justify-center
+                    "
+                >
+                    {profile.avatar ? (
+                        <img
+                            src={profile.avatar}
+                            alt={`Portrait of ${name}`}
+                            draggable="false"
+                            className="
+                                hero-photo
+                                h-auto
+                                max-h-full
+                                w-auto
+                                max-w-[46vw]
+                                select-none
+                                object-contain
+                                object-bottom
+
+                                lg:max-h-[78vh]
+                                xl:max-h-[84vh]
+                                2xl:max-h-[88vh]
+                            "
+                        />
+                    ) : (
                         <div
                             className="
-                                mb-4
+                                hero-photo
                                 flex
+                                h-[75vh]
+                                w-[420px]
                                 items-center
-                                gap-2
-                                text-[10px]
-                                font-medium
-                                uppercase
-                                tracking-[0.22em]
-                                text-gray-500
-                            "
-                        >
-                            <span className="h-px w-5 bg-gray-500" />
-                            <span>Introduction</span>
-                        </div>
-
-                        {/* Heading */}
-                        <h2
-                            className="
-                                max-w-[390px]
-                                text-xl
-                                font-semibold
-                                leading-[1.15]
-                                text-white
-                                sm:text-2xl
-                                lg:text-[28px]
-                            "
-                        >
-                            {title}
-
-                            {location && (
-                                <>
-                                    , based in
-                                    <br />
-                                    {location}.
-                                </>
-                            )}
-                        </h2>
-
-                        {/* Description */}
-                        <p
-                            className="
-                                mt-5
-                                max-w-[390px]
-                                text-sm
-                                leading-6
-                                text-gray-400
-                            "
-                        >
-                            {cleanIntro.length > 180
-                                ? `${cleanIntro.slice(0, 180)}...`
-                                : cleanIntro}
-                        </p>
-
-                        {/* CTA */}
-                        <a
-                            href="#services"
-                            className="
-                                group
-                                mt-8
-                                inline-flex
-                                items-center
-                                gap-3
-                                text-sm
-                                font-semibold
+                                justify-center
+                                font-display
+                                text-[14rem]
+                                font-black
                                 text-accent-500
-                                transition-colors
-                                hover:text-accent-400
                             "
                         >
-                            <span
+                            {firstName
+                                .charAt(0)
+                                .toUpperCase()}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* ========================= */}
+            {/* MOBILE + TABLET */}
+            {/* ========================= */}
+            <div
+                className="
+                    relative
+                    mx-auto
+                    flex
+                    min-h-[100svh]
+                    w-full
+                    max-w-3xl
+                    flex-col
+                    px-6
+                    pt-28
+                    sm:px-10
+                    lg:hidden
+                "
+            >
+                {/* Name */}
+                <div className="relative z-30">
+                    <h1
+                        className="
+                            hero-name
+                            font-display
+                            text-[clamp(3.8rem,15vw,6rem)]
+                            font-extrabold
+                            leading-[0.84]
+                            tracking-[-0.06em]
+                            text-white
+                        "
+                    >
+                        <span className="block">
+                            {firstName}
+                        </span>
+
+                        {lastName && (
+                            <span className="block">
+                                {lastName}.
+                            </span>
+                        )}
+                    </h1>
+
+                    <div
+                        className="
+                            mt-6
+                            h-1
+                            w-14
+                            bg-accent-500
+                        "
+                    />
+                </div>
+
+                {/* Photo */}
+                <div
+                    className="
+                        relative
+                        z-20
+                        -mt-6
+                        flex
+                        h-[46vh]
+                        min-h-[350px]
+                        justify-center
+                        overflow-hidden
+                    "
+                >
+                    {profile.avatar ? (
+                        <img
+                            src={profile.avatar}
+                            alt={`Portrait of ${name}`}
+                            draggable="false"
+                            className="
+                                hero-photo
+                                h-full
+                                w-auto
+                                max-w-none
+                                object-contain
+                                object-bottom
+                            "
+                        />
+                    ) : (
+                        <div
+                            className="
+                                flex
+                                h-full
+                                items-center
+                                justify-center
+                                font-display
+                                text-[10rem]
+                                font-black
+                                text-accent-500
+                            "
+                        >
+                            {firstName
+                                .charAt(0)
+                                .toUpperCase()}
+                        </div>
+                    )}
+                </div>
+
+                {/* Mobile Intro */}
+                <div
+                    className="
+                        hero-intro
+                        relative
+                        z-30
+                        border-t
+                        border-white/[0.06]
+                        py-10
+                    "
+                >
+                    <div
+                        className="
+                            mb-4
+                            flex
+                            items-center
+                            gap-3
+                            text-[9px]
+                            font-semibold
+                            uppercase
+                            tracking-[0.28em]
+                            text-gray-500
+                        "
+                    >
+                        <span className="h-px w-7 bg-gray-600" />
+
+                        <span>
+                            Introduction
+                        </span>
+                    </div>
+
+                    <h2
+                        className="
+                            max-w-lg
+                            font-display
+                            text-2xl
+                            font-semibold
+                            leading-[1.15]
+                            tracking-[-0.03em]
+                            text-white
+                            sm:text-3xl
+                        "
+                    >
+                        {title}
+
+                        {location && (
+                            <>
+                                , based in {location}.
+                            </>
+                        )}
+                    </h2>
+
+                    <p
+                        className="
+                            mt-5
+                            max-w-xl
+                            text-sm
+                            leading-7
+                            text-gray-400
+                        "
+                    >
+                        {cleanIntro.length > 180
+                            ? `${cleanIntro.slice(0, 180)}...`
+                            : cleanIntro}
+                    </p>
+
+                    <div
+                        className="
+                            mt-7
+                            flex
+                            flex-wrap
+                            items-center
+                            gap-6
+                        "
+                    >
+                        {hasProjects && (
+                            <a
+                                href="#projects"
                                 className="
+                                    group
+                                    inline-flex
+                                    items-center
+                                    gap-2
                                     border-b
-                                    border-accent-500/50
+                                    border-accent-500
                                     pb-1
+                                    text-sm
+                                    font-semibold
+                                    text-accent-500
                                 "
                             >
                                 My story
-                            </span>
 
-                            <ArrowRight
+                                <ArrowRight className="h-4 w-4" />
+                            </a>
+                        )}
+
+                        {profile.resume_url && (
+                            <a
+                                href={profile.resume_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="
-                                    h-4
-                                    w-4
-                                    transition-transform
-                                    duration-300
-                                    group-hover:translate-x-1
+                                    inline-flex
+                                    items-center
+                                    gap-2
+                                    text-sm
+                                    text-gray-400
                                 "
-                            />
-                        </a>
+                            >
+                                <Download className="h-4 w-4" />
+
+                                {profile.resume_label ||
+                                    'Download CV'}
+                            </a>
+                        )}
                     </div>
+
+                    {socialLinks.length > 0 && (
+                        <div className="mt-9">
+                            <SocialLinks
+                                links={socialLinks}
+                                size="md"
+                            />
+                        </div>
+                    )}
+
+                    {profile.email && (
+                        <a
+                            href={`mailto:${profile.email}`}
+                            className="
+                                mt-7
+                                inline-flex
+                                items-center
+                                gap-2
+                                text-xs
+                                text-gray-500
+                            "
+                        >
+                            <Mail className="h-4 w-4 text-accent-500" />
+
+                            {profile.email}
+                        </a>
+                    )}
                 </div>
             </div>
         </section>

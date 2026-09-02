@@ -25,7 +25,7 @@ const iconMap = {
     website: Globe,
 };
 
-export default function SocialLinks({ links = [], size = 'md' }) {
+export default function SocialLinks({ links = [], size = 'md', showLabels = false }) {
     if (!links || links.length === 0) return null;
 
     const sizeClasses = {
@@ -53,9 +53,10 @@ export default function SocialLinks({ links = [], size = 'md' }) {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={link.label || link.platform}
-                        className={`inline-flex items-center justify-center rounded-full border border-dark-600/80 bg-dark-800/60 text-gray-300 hover:text-accent-500 hover:border-accent-500/60 hover:bg-dark-700 transition-all ${sizeClasses[size] || sizeClasses.md}`}
+                        className={`inline-flex items-center justify-center gap-2 border border-dark-600/80 bg-dark-800/60 text-gray-300 transition-all hover:border-accent-500/60 hover:bg-dark-700 hover:text-accent-500 ${showLabels ? 'h-9 rounded-xl px-3 text-xs font-semibold' : `rounded-full ${sizeClasses[size] || sizeClasses.md}`}`}
                     >
                         <IconComponent className={iconSizes[size] || iconSizes.md} />
+                        {showLabels && <span>{link.label || link.platform}</span>}
                     </a>
                 );
             })}

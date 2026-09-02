@@ -55,6 +55,7 @@ class CertificationResource extends Resource
 
                         Forms\Components\FileUpload::make('image')
                             ->image()
+                            ->disk('public')
                             ->directory('certifications')
                             ->maxSize(2048)
                             ->columnSpanFull(),
@@ -67,6 +68,7 @@ class CertificationResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
+                    ->disk('public')
                     ->square(),
 
                 Tables\Columns\TextColumn::make('name')

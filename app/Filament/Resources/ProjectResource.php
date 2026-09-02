@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProjectResource\Pages;
+use App\Filament\Resources\ProjectResource\RelationManagers;
 use App\Models\Project;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -55,6 +56,31 @@ class ProjectResource extends Resource
                                     ->placeholder('Full description, features, architecture details...'),
                             ])->columns(2),
 
+                        Forms\Components\Section::make('Case Study')
+                            ->description('Explain the project so recruiters can understand your contribution and decisions.')
+                            ->schema([
+                                Forms\Components\TextInput::make('role')
+                                    ->label('Your Role')
+                                    ->maxLength(255)
+                                    ->placeholder('e.g. Fullstack Developer')
+                                    ->columnSpanFull(),
+
+                                Forms\Components\RichEditor::make('challenge')
+                                    ->label('Challenge')
+                                    ->placeholder('What problem did this project need to solve?')
+                                    ->columnSpanFull(),
+
+                                Forms\Components\RichEditor::make('solution')
+                                    ->label('Solution & Contribution')
+                                    ->placeholder('What did you build and which decisions did you make?')
+                                    ->columnSpanFull(),
+
+                                Forms\Components\RichEditor::make('impact')
+                                    ->label('Outcome / Impact')
+                                    ->placeholder('What concrete outcome did the project produce?')
+                                    ->columnSpanFull(),
+                            ]),
+
                         Forms\Components\Section::make('Technologies & Media')
                             ->schema([
                                 Forms\Components\Select::make('skills')
@@ -67,6 +93,7 @@ class ProjectResource extends Resource
 
                                 Forms\Components\FileUpload::make('thumbnail')
                                     ->image()
+                                    ->disk('public')
                                     ->directory('projects')
                                     ->maxSize(2048)
                                     ->columnSpanFull(),
@@ -117,6 +144,7 @@ class ProjectResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('thumbnail')
+                    ->disk('public')
                     ->square(),
 
                 Tables\Columns\TextColumn::make('title')
@@ -183,6 +211,13 @@ class ProjectResource extends Resource
             'index'  => Pages\ListProjects::route('/'),
             'create' => Pages\CreateProject::route('/create'),
             'edit'   => Pages\EditProject::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\MediaRelationManager::class,
         ];
     }
 

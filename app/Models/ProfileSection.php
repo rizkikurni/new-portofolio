@@ -22,10 +22,10 @@ class ProfileSection extends Model
     // Default section keys with their default sort order
     public const DEFAULT_SECTIONS = [
         'hero'         => 0,
-        'about'        => 1,
-        'skills'       => 2,
-        'projects'     => 3,
-        'experience'   => 4,
+        'projects'     => 1,
+        'experience'   => 2,
+        'skills'       => 3,
+        'about'        => 4,
         'education'    => 5,
         'certifications' => 6,
         'contact'      => 7,

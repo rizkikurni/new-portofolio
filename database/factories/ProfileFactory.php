@@ -27,6 +27,8 @@ class ProfileFactory extends Factory
             'email'            => fake()->safeEmail(),
             'phone'            => fake()->phoneNumber(),
             'avatar'           => null,
+            'resume_path'      => null,
+            'resume_label'     => 'Download CV',
             'meta_title'       => $name . ' Portfolio',
             'meta_description' => fake()->sentence(),
             'og_image'         => null,

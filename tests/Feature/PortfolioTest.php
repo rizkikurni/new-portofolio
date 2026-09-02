@@ -4,7 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Profile;
 use App\Models\Project;
+use App\Models\ProjectMedia;
 use App\Models\Skill;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -28,6 +30,8 @@ class PortfolioTest extends TestCase
                 ->has('profile')
                 ->where('profile.slug', 'frontend')
                 ->where('profile.is_default', true)
+                ->where('sections.0.key', 'hero')
+                ->where('sections.1.key', 'projects')
         );
     }
 
@@ -61,6 +65,20 @@ class PortfolioTest extends TestCase
 
     public function test_project_detail_page_loads_technologies(): void
     {
+        $project = Project::where('slug', 'phishguard')->firstOrFail();
+        $project->update([
+            'role'      => 'Machine Learning Engineer',
+            'challenge' => '<p>Detect suspicious URLs.</p>',
+            'solution'  => '<p>Built an XGBoost classification pipeline.</p>',
+            'impact'    => '<p>Created a reusable detection workflow.</p>',
+        ]);
+        ProjectMedia::create([
+            'project_id' => $project->id,
+            'file_path'  => 'projects/gallery/phishguard-dashboard.png',
+            'alt_text'   => 'PhishGuard dashboard',
+            'sort_order' => 0,
+        ]);
+
         $response = $this->get('/projects/phishguard');
 
         $response->assertStatus(200);
@@ -68,7 +86,25 @@ class PortfolioTest extends TestCase
             $page->component('Project/Show')
                 ->where('project.slug', 'phishguard')
                 ->has('project.skills')
+                ->where('project.role', 'Machine Learning Engineer')
+                ->has('project.media', 1)
         );
+    }
+
+    public function test_profile_exposes_resume_when_available(): void
+    {
+        $profile = Profile::where('slug', 'frontend')->firstOrFail();
+        $profile->update([
+            'resume_path'  => 'resumes/frontend-cv.pdf',
+            'resume_label' => 'Download Frontend CV',
+        ]);
+
+        $this->get('/profile/frontend')
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->where('profile.resume_label', 'Download Frontend CV')
+                ->where('profile.resume_url', asset('storage/resumes/frontend-cv.pdf'))
+            );
     }
 
     public function test_profile_duplication_copies_relations_without_duplicating_global_records(): void
@@ -107,5 +143,20 @@ class PortfolioTest extends TestCase
         $response = $this->get('/admin/login');
 
         $response->assertStatus(200);
+    }
+
+    public function test_admin_edit_pages_support_new_portfolio_fields(): void
+    {
+        $user = User::factory()->create();
+        $profile = Profile::where('slug', 'frontend')->firstOrFail();
+        $project = Project::where('slug', 'portfolio-platform')->firstOrFail();
+
+        $this->actingAs($user)
+            ->get("/admin/profiles/{$profile->id}/edit")
+            ->assertOk();
+
+        $this->actingAs($user)
+            ->get("/admin/projects/{$project->id}/edit")
+            ->assertOk();
     }
 }

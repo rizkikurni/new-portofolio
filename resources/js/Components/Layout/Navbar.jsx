@@ -1,90 +1,79 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Download, Menu, X } from 'lucide-react';
 import Container from './Container';
-import { Menu, X } from 'lucide-react';
 
-export default function Navbar({ title = 'Portfolio', sections = [] }) {
+const NAV_ITEMS = [
+    { key: 'projects', label: 'Projects' },
+    { key: 'experience', label: 'Experience' },
+    { key: 'skills', label: 'Skills' },
+    { key: 'about', label: 'About' },
+    { key: 'contact', label: 'Contact' },
+];
+
+export default function Navbar({ title = 'Portfolio', sections = [], resumeUrl, resumeLabel = 'Download CV', homeUrl = '' }) {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 20);
-        window.addEventListener('scroll', onScroll);
+        window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    // Nav items derived from enabled sections
-    const allNavItems = [
-        { key: 'services', label: 'Services' },
-        { key: 'projects', label: 'Works' },
-        { key: 'experience', label: 'Experience' },
-    ];
-
-    const navItems = allNavItems.filter((item) => {
-        if (!sections || sections.length === 0) return true;
-        if (item.key === 'services') return true;
-        return sections.some((s) => (typeof s === 'string' ? s : s.key) === item.key);
-    });
+    const enabledKeys = sections.map((section) => typeof section === 'string' ? section : section.key);
+    const navItems = NAV_ITEMS.filter((item) => enabledKeys.length === 0 || enabledKeys.includes(item.key));
+    const initials = title.split(' ').filter(Boolean).slice(0, 2).map((part) => part[0]).join('').toUpperCase();
 
     return (
-        <header
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-                    ? 'bg-dark-900/90 backdrop-blur-md border-b border-dark-600/50 py-4'
-                    : 'bg-transparent py-6'
-                }`}
-        >
+        <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled ? 'border-b border-white/5 bg-dark-900/90 py-3 backdrop-blur-xl' : 'bg-transparent py-5'}`}>
             <Container>
-                <div className="mx-auto max-w-7xl px-6 lg:px-10">
-                    <div className="flex items-center justify-between">
-                        {/* Logo Mark — "D" shape in golden yellow */}
-                        <a href="#" className="flex items-center group">
-                            <div className="w-10 h-10 rounded-xl bg-accent-500 flex items-center justify-center">
-                                <svg className="w-5 h-5 text-dark-900" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M4 3h6a7 7 0 0 1 0 14H4V3zm2.5 2.5v9H10a4.5 4.5 0 0 0 0-9H6.5z" />
-                                </svg>
-                            </div>
-                        </a>
+                <div className="flex items-center justify-between gap-6">
+                    <a href={`${homeUrl}#hero`} className="group flex items-center gap-3" aria-label="Back to portfolio">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-500 text-xs font-extrabold text-dark-900 transition-transform group-hover:-rotate-3">
+                            {initials || 'PF'}
+                        </span>
+                        <span className="hidden max-w-48 truncate text-sm font-bold text-white sm:block">{title}</span>
+                    </a>
 
-                        {/* Desktop Nav */}
-                        <nav className="hidden md:flex items-center gap-10">
+                    <div className="hidden items-center gap-7 lg:flex">
+                        <nav className="flex items-center gap-7" aria-label="Primary navigation">
                             {navItems.map((item) => (
-                                <a
-                                    key={item.key}
-                                    href={`#${item.key}`}
-                                    className="text-[13px] font-semibold text-gray-400 hover:text-white tracking-wide transition-colors"
-                                >
+                                <a key={item.key} href={`${homeUrl}#${item.key}`} className="text-xs font-semibold tracking-wide text-gray-400 transition-colors hover:text-white">
                                     {item.label}
                                 </a>
                             ))}
                         </nav>
 
-                        {/* Mobile Menu Button */}
-                        <button
-                            onClick={() => setMobileOpen(!mobileOpen)}
-                            className="md:hidden p-2 text-gray-400 hover:text-white"
-                            aria-label="Toggle menu"
-                        >
-                            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                        </button>
+                        {resumeUrl && (
+                            <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-dark-900 transition-colors hover:bg-accent-400">
+                                <Download className="h-4 w-4" />
+                                {resumeLabel}
+                            </a>
+                        )}
                     </div>
 
-                    {/* Mobile Drawer */}
-                    {mobileOpen && (
-                        <div className="md:hidden mt-4 py-4 px-2 bg-dark-700 border border-dark-600 rounded-2xl">
-                            <nav className="flex flex-col gap-1">
-                                {navItems.map((item) => (
-                                    <a
-                                        key={item.key}
-                                        href={`#${item.key}`}
-                                        onClick={() => setMobileOpen(false)}
-                                        className="px-4 py-2.5 text-sm font-medium text-gray-300 hover:text-white hover:bg-dark-800 rounded-xl transition-colors"
-                                    >
-                                        {item.label}
-                                    </a>
-                                ))}
-                            </nav>
-                        </div>
-                    )}
+                    <button type="button" onClick={() => setMobileOpen((open) => !open)} className="rounded-lg border border-white/10 p-2 text-gray-300 transition-colors hover:text-white lg:hidden" aria-label="Toggle navigation" aria-expanded={mobileOpen}>
+                        {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                    </button>
                 </div>
+
+                {mobileOpen && (
+                    <div className="mt-4 rounded-2xl border border-white/10 bg-dark-800 p-3 shadow-2xl lg:hidden">
+                        <nav className="flex flex-col gap-1" aria-label="Mobile navigation">
+                            {navItems.map((item) => (
+                                <a key={item.key} href={`${homeUrl}#${item.key}`} onClick={() => setMobileOpen(false)} className="rounded-xl px-4 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-white/5 hover:text-white">
+                                    {item.label}
+                                </a>
+                            ))}
+                            {resumeUrl && (
+                                <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-accent-500 px-4 py-3 text-sm font-bold text-dark-900">
+                                    <Download className="h-4 w-4" />
+                                    {resumeLabel}
+                                </a>
+                            )}
+                        </nav>
+                    </div>
+                )}
             </Container>
         </header>
     );

@@ -106,8 +106,26 @@ class ProfileResource extends Resource
                                             ->schema([
                                                 Forms\Components\FileUpload::make('avatar')
                                                     ->image()
+                                                    ->disk('public')
                                                     ->directory('profiles')
                                                     ->maxSize(2048),
+                                            ]),
+
+                                        Forms\Components\Section::make('Resume')
+                                            ->schema([
+                                                Forms\Components\FileUpload::make('resume_path')
+                                                    ->label('CV / Resume (PDF)')
+                                                    ->disk('public')
+                                                    ->directory('resumes')
+                                                    ->acceptedFileTypes(['application/pdf'])
+                                                    ->maxSize(5120)
+                                                    ->downloadable()
+                                                    ->openable(),
+
+                                                Forms\Components\TextInput::make('resume_label')
+                                                    ->maxLength(80)
+                                                    ->placeholder('Download CV')
+                                                    ->helperText('Button label shown on this portfolio profile.'),
                                             ]),
                                     ])->columnSpan(1),
                             ])->columns(3),
@@ -130,6 +148,7 @@ class ProfileResource extends Resource
                                 Forms\Components\FileUpload::make('og_image')
                                     ->label('Open Graph Image')
                                     ->image()
+                                    ->disk('public')
                                     ->directory('profiles')
                                     ->maxSize(2048)
                                     ->helperText('Image shown when sharing portfolio link on social media'),
@@ -183,6 +202,7 @@ class ProfileResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('avatar')
+                    ->disk('public')
                     ->circular(),
 
                 Tables\Columns\TextColumn::make('name')
@@ -285,6 +305,8 @@ class ProfileResource extends Resource
                                 'email'            => $record->email,
                                 'phone'            => $record->phone,
                                 'avatar'           => $record->avatar,
+                                'resume_path'      => $record->resume_path,
+                                'resume_label'     => $record->resume_label,
                                 'meta_title'       => $record->meta_title,
                                 'meta_description' => $record->meta_description,
                                 'og_image'         => $record->og_image,

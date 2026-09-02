@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
@@ -15,6 +16,10 @@ class Project extends Model
         'title',
         'short_description',
         'description',
+        'role',
+        'challenge',
+        'solution',
+        'impact',
         'thumbnail',
         'github_url',
         'demo_url',
@@ -47,6 +52,12 @@ class Project extends Model
             ->withPivot(['sort_order'])
             ->withTimestamps()
             ->orderByPivot('sort_order');
+    }
+
+    public function media(): HasMany
+    {
+        return $this->hasMany(ProjectMedia::class)
+            ->orderBy('sort_order');
     }
 
     // -------------------------------------------------------------------------

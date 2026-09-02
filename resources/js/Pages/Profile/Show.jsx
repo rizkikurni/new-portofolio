@@ -4,14 +4,12 @@ import Footer from '../../Components/Layout/Footer';
 import Container from '../../Components/Layout/Container';
 
 import Hero from '../../Components/Profile/Hero';
-import ServicesGrid from '../../Components/Profile/ServicesGrid';
 import About from '../../Components/Profile/About';
 import Skills from '../../Components/Profile/Skills';
 import Projects from '../../Components/Profile/Projects';
 import Experience from '../../Components/Profile/Experience';
 import Education from '../../Components/Profile/Education';
 import Certifications from '../../Components/Profile/Certifications';
-import TestimonialQuote from '../../Components/Profile/TestimonialQuote';
 import Contact from '../../Components/Profile/Contact';
 
 export default function Show({
@@ -28,10 +26,13 @@ export default function Show({
     // Map section key to its React component renderer
     const sectionComponentMap = {
         hero: (
-            <div key="hero-group">
-                <Hero profile={profile} socialLinks={social_links} />
-                <ServicesGrid profile={profile} projects={projects} skills={skills} />
-            </div>
+            <Hero
+                key="hero"
+                profile={profile}
+                socialLinks={social_links}
+                skills={skills}
+                hasProjects={projects.length > 0}
+            />
         ),
         about: (
             <About key="about" aboutText={profile.about} />
@@ -52,10 +53,7 @@ export default function Show({
             <Certifications key="certifications" certifications={certifications} />
         ),
         contact: (
-            <div key="contact-group">
-                <TestimonialQuote profile={profile} />
-                <Contact profile={profile} socialLinks={social_links} />
-            </div>
+            <Contact key="contact" profile={profile} socialLinks={social_links} />
         ),
     };
 
@@ -64,30 +62,38 @@ export default function Show({
         ? [...sections]
             .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
             .map((s) => (typeof s === 'string' ? s : s.key))
-        : ['hero', 'projects', 'experience', 'skills', 'education', 'certifications', 'contact'];
+        : ['hero', 'projects', 'experience', 'skills', 'about', 'education', 'certifications', 'contact'];
 
     return (
-        <div className="min-h-screen bg-dark-900 text-gray-300 font-sans antialiased selection:bg-accent-500/20 selection:text-accent-400">
+        <div className="min-h-screen overflow-x-hidden bg-dark-900 font-sans text-gray-300 antialiased selection:bg-accent-500/25 selection:text-white">
             {/* Dynamic SEO Meta Tags */}
             <Head>
-                <title>{profile.meta_title || `${profile.name || 'Carlos Mendoza'} — ${profile.title || 'Portfolio'}`}</title>
+                <title>{profile.meta_title || `${profile.name || 'Developer'} — ${profile.title || 'Portfolio'}`}</title>
                 <meta name="description" content={profile.meta_description || profile.tagline || ''} />
-                <meta property="og:title" content={profile.meta_title || `${profile.name || 'Carlos Mendoza'} — ${profile.title || 'Portfolio'}`} />
+                <meta property="og:title" content={profile.meta_title || `${profile.name || 'Developer'} — ${profile.title || 'Portfolio'}`} />
                 <meta property="og:description" content={profile.meta_description || profile.tagline || ''} />
                 {profile.og_image && <meta property="og:image" content={profile.og_image} />}
             </Head>
 
             {/* Navbar */}
-            <Navbar title={profile.name || 'Portfolio'} sections={sections} />
+            <Navbar
+                title={profile.name || 'Portfolio'}
+                sections={sections}
+                resumeUrl={profile.resume_url}
+                resumeLabel={profile.resume_label}
+            />
 
             {/* Main Content Area */}
-            <main className="relative z-10">
-                <Container>
-                    {sortedEnabledSections.map((sectionKey) => {
-                        const component = sectionComponentMap[sectionKey];
-                        return component || null;
-                    })}
-                </Container>
+            <main>
+                {sortedEnabledSections.map((sectionKey) => {
+                    const component = sectionComponentMap[sectionKey];
+
+                    if (!component) return null;
+
+                    return sectionKey === 'hero'
+                        ? component
+                        : <Container key={`${sectionKey}-container`}>{component}</Container>;
+                })}
             </main>
 
             {/* Footer */}

@@ -2,18 +2,23 @@ import Section from '../UI/Section';
 import ProjectCard from './ProjectCard';
 
 export default function Projects({ projects = [] }) {
-    if (!projects || projects.length === 0) return null;
+    if (!projects.length) return null;
+
+    const orderedProjects = [...projects].sort((a, b) => {
+        if (a.is_featured !== b.is_featured) return a.is_featured ? -1 : 1;
+        return (a.sort_order ?? 0) - (b.sort_order ?? 0);
+    });
 
     return (
         <Section
             id="projects"
-            tag="Portfolio"
-            title="All Creative Works, Selected projects."
-            subtitle="A curated selection of applications, systems, and design projects built with craft and precision."
+            tag="Selected work"
+            title="Projects that show how I think and build."
+            subtitle="A focused selection of work, with context on the problem, my contribution, and the outcome."
         >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {projects.map((project) => (
-                    <ProjectCard key={project.id} project={project} />
+            <div className="space-y-6">
+                {orderedProjects.map((project, index) => (
+                    <ProjectCard key={project.id} project={project} index={index} />
                 ))}
             </div>
         </Section>

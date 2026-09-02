@@ -151,7 +151,7 @@ The same project/skill/experience may appear in multiple profiles. Do not duplic
 ```
 users
 profiles, profile_sections
-projects, project_skill, profile_project
+projects, project_media, project_skill, profile_project
 skills, profile_skill
 experiences, profile_experience
 educations, certifications
@@ -168,7 +168,7 @@ Use Laravel's default users table: id, name, email, email_verified_at, password,
 
 # 12. PROFILES TABLE
 
-Fields: id, slug (UNIQUE), name, title, tagline, about, location, email, phone, meta_title, meta_description, og_image, is_default, is_active, created_at, updated_at.
+Fields: id, slug (UNIQUE), name, title, tagline, about, location, email, phone, avatar, resume_path, resume_label, meta_title, meta_description, og_image, is_default, is_active, created_at, updated_at.
 
 Rules: slug must be unique. name is the internal name. title is the public job title. is_active controls public visibility. is_default identifies the default homepage profile. Only one profile may be the default.
 
@@ -185,7 +185,14 @@ Supported section keys: hero, about, skills, projects, experience, education, ce
 
 # 14. PROJECTS TABLE
 
-Fields: id, slug (UNIQUE), title, short_description, description, thumbnail, github_url, demo_url, start_date, end_date, status (completed|ongoing|archived), is_active, created_at, updated_at.
+Fields: id, slug (UNIQUE), title, short_description, description, role, challenge, solution, impact, thumbnail, github_url, demo_url, start_date, end_date, status (completed|ongoing|archived), is_active, created_at, updated_at.
+
+---
+
+# 14A. PROJECT MEDIA TABLE
+
+Fields: id, project_id, file_path, media_type, alt_text, caption, sort_order, created_at, updated_at.
+Project media belongs to one project, uses public Laravel Storage, and is ordered by sort_order.
 
 ---
 
@@ -393,7 +400,7 @@ Section ordering must be configurable through sort_order. Render sections accord
 
 # 35. HERO SECTION
 
-Display: Name, Professional Title, Tagline, Short introduction, Primary CTA, Secondary CTA, Social links.
+Display: Name, Professional Title, Tagline, Location, Core Featured Skills, Primary CTA, Profile-specific Resume CTA, Social links, Avatar.
 Content must come from the profile. Do not hardcode role names.
 
 ---
@@ -413,20 +420,20 @@ Each skill: Name, Category, Icon, Description.
 
 # 38. PROJECT SECTION
 
-Support: Thumbnail, Title, Short description, Technologies, GitHub URL, Demo URL, Featured status.
+Support: Thumbnail, Title, Short description, Role, Technologies, Outcome, GitHub URL, Demo URL, Featured status.
 Featured projects appear first. Project ordering must respect profile_project.sort_order.
 
 ---
 
 # 39. PROJECT CARD
 
-Include: Image, Title, Short Description, Technology Tags, GitHub Button, Live Demo Button.
+Include: Image, Title, Short Description, Role, Technology Tags, Featured State, Outcome, and Case Study Link.
 
 ---
 
 # 40. PROJECT DETAIL PAGE (/projects/{slug})
 
-Display: Project Title, Thumbnail, Description, Technologies, GitHub, Live Demo, Status, Start Date, End Date.
+Display: Project Title, Thumbnail, Description, Role, Challenge, Solution, Impact, Technologies, Gallery, GitHub, Live Demo, Status, Start Date, End Date.
 
 ---
 
@@ -479,14 +486,14 @@ Create, Edit, Delete, Activate, Deactivate, Duplicate, Set as Default, Preview.
 
 # 48. PROJECT RESOURCE ACTIONS
 
-Create, Edit, Delete, Upload Thumbnail, Set GitHub URL, Set Demo URL, Set Status, Set Start/End Date, Assign Technologies.
+Create, Edit, Delete, Upload Thumbnail, Manage Project Gallery, Write Case Study, Set GitHub URL, Set Demo URL, Set Status, Set Start/End Date, Assign Technologies.
 
 ---
 
 # 49. IMAGE STORAGE
 
 Use Laravel Storage. Store only file paths, not binary data in MySQL.
-Paths: storage/app/public/projects/, storage/app/public/profiles/, storage/app/public/certifications/.
+Paths: storage/app/public/projects/, storage/app/public/projects/gallery/, storage/app/public/profiles/, storage/app/public/resumes/, storage/app/public/certifications/.
 Run: php artisan storage:link.
 
 All uploads must be validated: Allowed MIME types, Maximum file size, Image validation, Safe filenames. Do not trust the uploaded file extension.
@@ -637,7 +644,7 @@ Slug rules: Lowercase, Hyphen-separated, Unique, URL-safe.
 
 # 69. NAVIGATION
 
-Navbar: Logo/Name, About, Skills, Projects, Experience, Contact, Theme Toggle.
+Navbar: Logo/Name, Projects, Experience, Skills, About, Contact, Profile-specific Resume CTA, Theme Toggle.
 Mobile: collapsible navigation menu.
 Menu items should respect enabled profile sections.
 
