@@ -64,6 +64,23 @@ export default function Show({
             .map((s) => (typeof s === 'string' ? s : s.key))
         : ['hero', 'projects', 'experience', 'skills', 'about', 'education', 'certifications', 'contact'];
 
+    const sectionHasContent = {
+        hero: true,
+        about: Boolean(profile.about),
+        skills: Object.keys(skills_by_category || {}).length > 0 || skills.length > 0,
+        projects: projects.length > 0,
+        experience: experiences.length > 0,
+        education: educations.length > 0,
+        certifications: certifications.length > 0,
+        contact: Boolean(profile.email) || social_links.length > 0,
+    };
+
+    const visibleSectionKeys = sortedEnabledSections.filter(
+        (sectionKey) => sectionComponentMap[sectionKey] && sectionHasContent[sectionKey],
+    );
+
+    const contentSectionKeys = visibleSectionKeys.filter((sectionKey) => sectionKey !== 'hero');
+
     return (
         <div className="min-h-screen overflow-x-hidden bg-dark-900 font-sans text-gray-300 antialiased selection:bg-accent-500/25 selection:text-white">
             {/* Dynamic SEO Meta Tags */}
@@ -85,14 +102,21 @@ export default function Show({
 
             {/* Main Content Area */}
             <main>
-                {sortedEnabledSections.map((sectionKey) => {
+                {visibleSectionKeys.map((sectionKey) => {
                     const component = sectionComponentMap[sectionKey];
 
-                    if (!component) return null;
+                    if (sectionKey === 'hero') return component;
 
-                    return sectionKey === 'hero'
-                        ? component
-                        : <Container key={`${sectionKey}-container`}>{component}</Container>;
+                    const sectionIndex = contentSectionKeys.indexOf(sectionKey);
+                    const backgroundClass = sectionIndex % 2 === 0
+                        ? 'bg-dark-900'
+                        : 'bg-dark-800';
+
+                    return (
+                        <div key={`${sectionKey}-background`} className={backgroundClass}>
+                            <Container>{component}</Container>
+                        </div>
+                    );
                 })}
             </main>
 

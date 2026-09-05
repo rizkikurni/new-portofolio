@@ -6,7 +6,7 @@ const variants = {
 
 export default function Badge({ children, variant = 'dark', className = '' }) {
     return (
-        <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full ${variants[variant] || variants.dark} ${className}`}>
+        <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full lg:text-sm ${variants[variant] || variants.dark} ${className}`}>
             {children}
         </span>
     );

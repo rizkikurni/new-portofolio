@@ -29,23 +29,23 @@ export default function Navbar({ title = 'Portfolio', sections = [], resumeUrl, 
             <Container>
                 <div className="flex items-center justify-between gap-6">
                     <a href={`${homeUrl}#hero`} className="group flex items-center gap-3" aria-label="Back to portfolio">
-                        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-500 text-xs font-extrabold text-dark-900 transition-transform group-hover:-rotate-3">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-500 text-xs font-extrabold text-dark-900 transition-transform group-hover:-rotate-3 lg:text-sm">
                             {initials || 'PF'}
                         </span>
-                        <span className="hidden max-w-48 truncate text-sm font-bold text-white sm:block">{title}</span>
+                        <span className="hidden max-w-48 truncate text-sm font-bold text-white sm:block lg:text-base">{title}</span>
                     </a>
 
                     <div className="hidden items-center gap-7 lg:flex">
                         <nav className="flex items-center gap-7" aria-label="Primary navigation">
                             {navItems.map((item) => (
-                                <a key={item.key} href={`${homeUrl}#${item.key}`} className="text-xs font-semibold tracking-wide text-gray-400 transition-colors hover:text-white">
+                                <a key={item.key} href={`${homeUrl}#${item.key}`} className="text-xs font-semibold tracking-wide text-gray-400 transition-colors hover:text-white lg:text-[15px]">
                                     {item.label}
                                 </a>
                             ))}
                         </nav>
 
                         {resumeUrl && (
-                            <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-dark-900 transition-colors hover:bg-accent-400">
+                            <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-dark-900 transition-colors hover:bg-accent-400 lg:text-sm">
                                 <Download className="h-4 w-4" />
                                 {resumeLabel}
                             </a>

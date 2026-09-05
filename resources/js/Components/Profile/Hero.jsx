@@ -165,7 +165,7 @@ export default function Hero({
                                     flex
                                     items-center
                                     gap-3
-                                    text-[10px]
+                                    text-xs
                                     font-semibold
                                     uppercase
                                     tracking-[0.28em]
@@ -210,7 +210,7 @@ export default function Hero({
                                 className="
                                     mt-7
                                     max-w-[400px]
-                                    text-[14px]
+                                    text-base
                                     leading-7
                                     text-gray-400
                                 "
@@ -241,7 +241,7 @@ export default function Hero({
                                             border-b
                                             border-accent-500
                                             pb-1.5
-                                            text-sm
+                                            text-base
                                             font-semibold
                                             text-accent-500
                                             transition-colors
@@ -272,7 +272,7 @@ export default function Hero({
                                             inline-flex
                                             items-center
                                             gap-2
-                                            text-sm
+                                            text-base
                                             font-medium
                                             text-gray-500
                                             transition-colors
@@ -297,7 +297,7 @@ export default function Hero({
                                         inline-flex
                                         items-center
                                         gap-2
-                                        text-xs
+                                        text-sm
                                         font-medium
                                         text-gray-500
                                         transition-colors

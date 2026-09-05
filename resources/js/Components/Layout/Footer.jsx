@@ -11,18 +11,18 @@ export default function Footer({ profile = {}, socialLinks = [] }) {
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
                     {/* Brand / Name */}
                     <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-accent-500 flex items-center justify-center font-bold text-dark-900 text-xs">
+                        <div className="w-8 h-8 rounded-lg bg-accent-500 flex items-center justify-center font-bold text-dark-900 text-xs lg:text-sm">
                             <svg className="w-4 h-4 text-dark-900" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M4 3h6a7 7 0 0 1 0 14H4V3zm2.5 2.5v9H10a4.5 4.5 0 0 0 0-9H6.5z" />
                             </svg>
                         </div>
-                        <span className="text-sm font-semibold text-white tracking-wide">
+                        <span className="text-sm font-semibold text-white tracking-wide lg:text-base">
                             {name}
                         </span>
                     </div>
 
                     {/* Copyright */}
-                    <p className="text-xs text-gray-500 text-center sm:text-left">
+                    <p className="text-xs text-gray-500 text-center sm:text-left lg:text-sm">
                         &copy; {currentYear} {name}. All rights reserved.
                     </p>
 

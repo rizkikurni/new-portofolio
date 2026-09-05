@@ -1,4 +1,5 @@
 import Section from '../UI/Section';
+import ScrollReveal from '../UI/ScrollReveal';
 import ProjectCard from './ProjectCard';
 
 export default function Projects({ projects = [] }) {
@@ -18,7 +19,13 @@ export default function Projects({ projects = [] }) {
         >
             <div className="space-y-6">
                 {orderedProjects.map((project, index) => (
-                    <ProjectCard key={project.id} project={project} index={index} />
+                    <ScrollReveal
+                        key={project.id}
+                        variant={index % 2 === 0 ? 'from-left' : 'from-right'}
+                        delay={350 + Math.min(index, 2) * 120}
+                    >
+                        <ProjectCard project={project} index={index} />
+                    </ScrollReveal>
                 ))}
             </div>
         </Section>
