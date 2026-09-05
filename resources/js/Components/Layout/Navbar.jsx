@@ -10,7 +10,7 @@ const NAV_ITEMS = [
     { key: 'contact', label: 'Contact' },
 ];
 
-export default function Navbar({ title = 'Portfolio', sections = [], resumeUrl, resumeLabel = 'Download CV', homeUrl = '' }) {
+export default function Navbar({ title = 'Portfolio', logoUrl, sections = [], resumeUrl, resumeLabel = 'Download CV', homeUrl = '' }) {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -29,8 +29,10 @@ export default function Navbar({ title = 'Portfolio', sections = [], resumeUrl, 
             <Container>
                 <div className="flex items-center justify-between gap-6">
                     <a href={`${homeUrl}#hero`} className="group flex items-center gap-3" aria-label="Back to portfolio">
-                        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-500 text-xs font-extrabold text-dark-900 transition-transform group-hover:-rotate-3 lg:text-sm">
-                            {initials || 'PF'}
+                        <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-extrabold transition-transform group-hover:-rotate-3 lg:text-sm ${logoUrl ? 'overflow-hidden' : 'bg-accent-500 text-dark-900'}`}>
+                            {logoUrl ? (
+                                <img src={logoUrl} alt="" className="h-full w-full object-contain" />
+                            ) : (initials || 'PF')}
                         </span>
                         <span className="hidden max-w-48 truncate text-sm font-bold text-white sm:block lg:text-base">{title}</span>
                     </a>

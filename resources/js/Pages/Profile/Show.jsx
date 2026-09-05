@@ -88,11 +88,13 @@ export default function Show({
                 <meta property="og:title" content={profile.meta_title || `${profile.name || 'Developer'} — ${profile.title || 'Portfolio'}`} />
                 <meta property="og:description" content={profile.meta_description || profile.tagline || ''} />
                 {profile.og_image && <meta property="og:image" content={profile.og_image} />}
+                {profile.favicon_url && <link rel="icon" href={profile.favicon_url} />}
             </Head>
 
             {/* Navbar */}
             <Navbar
                 title={profile.name || 'Portfolio'}
+                logoUrl={profile.logo_url}
                 sections={sections}
                 resumeUrl={profile.resume_url}
                 resumeLabel={profile.resume_label}

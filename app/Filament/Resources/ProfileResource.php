@@ -12,7 +12,6 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -46,8 +45,7 @@ class ProfileResource extends Resource
                                             ->maxLength(255)
                                             ->placeholder('e.g. Frontend Developer')
                                             ->live(onBlur: true)
-                                            ->afterStateUpdated(fn (Forms\Set $set, ?string $state) => 
-                                                $set('slug', Str::slug($state))
+                                            ->afterStateUpdated(fn (Forms\Set $set, ?string $state) => $set('slug', Str::slug($state))
                                             ),
 
                                         Forms\Components\TextInput::make('slug')
@@ -102,13 +100,31 @@ class ProfileResource extends Resource
                                                     ->placeholder('+1 234 567 890'),
                                             ]),
 
-                                        Forms\Components\Section::make('Avatar')
+                                        Forms\Components\Section::make('Visual Identity')
                                             ->schema([
                                                 Forms\Components\FileUpload::make('avatar')
+                                                    ->label('Profile Photo')
                                                     ->image()
                                                     ->disk('public')
                                                     ->directory('profiles')
                                                     ->maxSize(2048),
+
+                                                Forms\Components\FileUpload::make('logo')
+                                                    ->label('Navbar & Footer Logo')
+                                                    ->image()
+                                                    ->disk('public')
+                                                    ->directory('branding/logos')
+                                                    ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml'])
+                                                    ->maxSize(2048)
+                                                    ->helperText('Used in the navbar and footer. A square transparent image is recommended.'),
+
+                                                Forms\Components\FileUpload::make('favicon')
+                                                    ->label('Browser Favicon')
+                                                    ->disk('public')
+                                                    ->directory('branding/favicons')
+                                                    ->acceptedFileTypes(['image/png', 'image/webp', 'image/svg+xml', 'image/x-icon', 'image/vnd.microsoft.icon'])
+                                                    ->maxSize(1024)
+                                                    ->helperText('Shown in the browser tab. Use a square PNG, SVG, WebP, or ICO file.'),
                                             ]),
 
                                         Forms\Components\Section::make('Resume')
@@ -166,14 +182,14 @@ class ProfileResource extends Resource
                                         Forms\Components\Select::make('section_key')
                                             ->label('Section')
                                             ->options([
-                                                'hero'           => 'Hero',
-                                                'about'          => 'About',
-                                                'skills'         => 'Skills',
-                                                'projects'       => 'Projects',
-                                                'experience'     => 'Experience',
-                                                'education'      => 'Education',
+                                                'hero' => 'Hero',
+                                                'about' => 'About',
+                                                'skills' => 'Skills',
+                                                'projects' => 'Projects',
+                                                'experience' => 'Experience',
+                                                'education' => 'Education',
                                                 'certifications' => 'Certifications',
-                                                'contact'        => 'Contact',
+                                                'contact' => 'Contact',
                                             ])
                                             ->required()
                                             ->disableOptionsWhenSelectedInSiblingRepeaterItems(),
@@ -280,47 +296,48 @@ class ProfileResource extends Resource
                         Forms\Components\TextInput::make('name')
                             ->label('New Profile Name')
                             ->required()
-                            ->default(fn (Profile $record) => $record->name . ' (Copy)')
+                            ->default(fn (Profile $record) => $record->name.' (Copy)')
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn (Forms\Set $set, ?string $state) => 
-                                $set('slug', Str::slug($state))
+                            ->afterStateUpdated(fn (Forms\Set $set, ?string $state) => $set('slug', Str::slug($state))
                             ),
 
                         Forms\Components\TextInput::make('slug')
                             ->label('New URL Slug')
                             ->required()
-                            ->default(fn (Profile $record) => $record->slug . '-copy')
+                            ->default(fn (Profile $record) => $record->slug.'-copy')
                             ->unique('profiles', 'slug'),
                     ])
                     ->action(function (Profile $record, array $data) {
                         DB::transaction(function () use ($record, $data) {
                             // 1. Duplicate profile attributes
                             $newProfile = Profile::create([
-                                'name'             => $data['name'],
-                                'slug'             => $data['slug'],
-                                'title'            => $record->title,
-                                'tagline'          => $record->tagline,
-                                'about'            => $record->about,
-                                'location'         => $record->location,
-                                'email'            => $record->email,
-                                'phone'            => $record->phone,
-                                'avatar'           => $record->avatar,
-                                'resume_path'      => $record->resume_path,
-                                'resume_label'     => $record->resume_label,
-                                'meta_title'       => $record->meta_title,
+                                'name' => $data['name'],
+                                'slug' => $data['slug'],
+                                'title' => $record->title,
+                                'tagline' => $record->tagline,
+                                'about' => $record->about,
+                                'location' => $record->location,
+                                'email' => $record->email,
+                                'phone' => $record->phone,
+                                'avatar' => $record->avatar,
+                                'logo' => $record->logo,
+                                'favicon' => $record->favicon,
+                                'resume_path' => $record->resume_path,
+                                'resume_label' => $record->resume_label,
+                                'meta_title' => $record->meta_title,
                                 'meta_description' => $record->meta_description,
-                                'og_image'         => $record->og_image,
-                                'is_default'       => false,
-                                'is_active'        => true,
+                                'og_image' => $record->og_image,
+                                'is_default' => false,
+                                'is_active' => true,
                             ]);
 
                             // 2. Duplicate sections
                             foreach ($record->sections as $sec) {
                                 ProfileSection::create([
-                                    'profile_id'  => $newProfile->id,
+                                    'profile_id' => $newProfile->id,
                                     'section_key' => $sec->section_key,
-                                    'is_enabled'  => $sec->is_enabled,
-                                    'sort_order'  => $sec->sort_order,
+                                    'is_enabled' => $sec->is_enabled,
+                                    'sort_order' => $sec->sort_order,
                                 ]);
                             }
 
@@ -328,7 +345,7 @@ class ProfileResource extends Resource
                             $projectsData = [];
                             foreach ($record->projects as $proj) {
                                 $projectsData[$proj->id] = [
-                                    'sort_order'  => $proj->pivot->sort_order,
+                                    'sort_order' => $proj->pivot->sort_order,
                                     'is_featured' => $proj->pivot->is_featured,
                                 ];
                             }
@@ -338,7 +355,7 @@ class ProfileResource extends Resource
                             $skillsData = [];
                             foreach ($record->skills as $sk) {
                                 $skillsData[$sk->id] = [
-                                    'sort_order'  => $sk->pivot->sort_order,
+                                    'sort_order' => $sk->pivot->sort_order,
                                     'is_featured' => $sk->pivot->is_featured,
                                 ];
                             }
@@ -382,9 +399,9 @@ class ProfileResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListProfiles::route('/'),
+            'index' => Pages\ListProfiles::route('/'),
             'create' => Pages\CreateProfile::route('/create'),
-            'edit'   => Pages\EditProfile::route('/{record}/edit'),
+            'edit' => Pages\EditProfile::route('/{record}/edit'),
         ];
     }
 }

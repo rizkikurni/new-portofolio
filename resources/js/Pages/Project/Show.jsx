@@ -10,7 +10,7 @@ const caseStudySections = [
     { key: 'impact', eyebrow: 'The outcome', title: 'What the project achieved' },
 ];
 
-export default function Show({ project = {}, social_links = [] }) {
+export default function Show({ project = {}, branding = {}, social_links = [] }) {
     const hasCaseStudy = caseStudySections.some(({ key }) => project[key]);
 
     return (
@@ -18,9 +18,16 @@ export default function Show({ project = {}, social_links = [] }) {
             <Head>
                 <title>{`${project.title || 'Project'} — Case Study`}</title>
                 <meta name="description" content={project.short_description || ''} />
+                {branding.favicon_url && <link rel="icon" href={branding.favicon_url} />}
             </Head>
 
-            <Navbar title="Portfolio" homeUrl="/" />
+            <Navbar
+                title={branding.name || 'Portfolio'}
+                logoUrl={branding.logo_url}
+                resumeUrl={branding.resume_url}
+                resumeLabel={branding.resume_label}
+                homeUrl="/"
+            />
 
             <main className="pt-32 sm:pt-36">
                 <Container>
@@ -119,7 +126,7 @@ export default function Show({ project = {}, social_links = [] }) {
                 </Container>
             </main>
 
-            <Footer socialLinks={social_links} />
+            <Footer profile={branding} socialLinks={social_links} />
         </div>
     );
 }

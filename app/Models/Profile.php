@@ -21,6 +21,8 @@ class Profile extends Model
         'email',
         'phone',
         'avatar',
+        'logo',
+        'favicon',
         'resume_path',
         'resume_label',
         'meta_title',

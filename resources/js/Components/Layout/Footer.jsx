@@ -11,10 +11,14 @@ export default function Footer({ profile = {}, socialLinks = [] }) {
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
                     {/* Brand / Name */}
                     <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-accent-500 flex items-center justify-center font-bold text-dark-900 text-xs lg:text-sm">
-                            <svg className="w-4 h-4 text-dark-900" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M4 3h6a7 7 0 0 1 0 14H4V3zm2.5 2.5v9H10a4.5 4.5 0 0 0 0-9H6.5z" />
-                            </svg>
+                        <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold lg:text-sm ${profile.logo_url ? 'overflow-hidden' : 'bg-accent-500 text-dark-900'}`}>
+                            {profile.logo_url ? (
+                                <img src={profile.logo_url} alt="" className="h-full w-full object-contain" />
+                            ) : (
+                                <svg className="h-4 w-4 text-dark-900" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M4 3h6a7 7 0 0 1 0 14H4V3zm2.5 2.5v9H10a4.5 4.5 0 0 0 0-9H6.5z" />
+                                </svg>
+                            )}
                         </div>
                         <span className="text-sm font-semibold text-white tracking-wide lg:text-base">
                             {name}

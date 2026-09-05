@@ -40,6 +40,24 @@ class PortfolioDataService
         });
     }
 
+    public function branding(): array
+    {
+        return $this->remember('branding', function (): array {
+            $profile = Profile::query()
+                ->active()
+                ->default()
+                ->first() ?? Profile::query()->active()->firstOrFail();
+
+            return [
+                'name' => $profile->name,
+                'logo_url' => $profile->logo ? asset('storage/'.$profile->logo) : null,
+                'favicon_url' => $profile->favicon ? asset('storage/'.$profile->favicon) : null,
+                'resume_url' => $profile->resume_path ? asset('storage/'.$profile->resume_path) : null,
+                'resume_label' => $profile->resume_label ?: 'Download CV',
+            ];
+        });
+    }
+
     public function invalidate(): void
     {
         $this->cache()->forever(self::VERSION_KEY, (string) Str::uuid());
@@ -217,6 +235,8 @@ class PortfolioDataService
                 'location' => $profile->location,
                 'email' => $profile->email,
                 'avatar' => $profile->avatar ? asset('storage/'.$profile->avatar) : null,
+                'logo_url' => $profile->logo ? asset('storage/'.$profile->logo) : null,
+                'favicon_url' => $profile->favicon ? asset('storage/'.$profile->favicon) : null,
                 'resume_url' => $profile->resume_path ? asset('storage/'.$profile->resume_path) : null,
                 'resume_label' => $profile->resume_label ?: 'Download CV',
                 'meta_title' => $profile->meta_title ?? "{$profile->name} — {$profile->title}",
