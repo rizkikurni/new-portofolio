@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Pivots\ProfileProject;
+use App\Models\Pivots\ProjectSkill;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,8 +33,8 @@ class Project extends Model
 
     protected $casts = [
         'start_date' => 'date',
-        'end_date'   => 'date',
-        'is_active'  => 'boolean',
+        'end_date' => 'date',
+        'is_active' => 'boolean',
     ];
 
     // -------------------------------------------------------------------------
@@ -42,6 +44,7 @@ class Project extends Model
     public function profiles(): BelongsToMany
     {
         return $this->belongsToMany(Profile::class, 'profile_project')
+            ->using(ProfileProject::class)
             ->withPivot(['sort_order', 'is_featured'])
             ->withTimestamps();
     }
@@ -49,6 +52,7 @@ class Project extends Model
     public function skills(): BelongsToMany
     {
         return $this->belongsToMany(Skill::class, 'project_skill')
+            ->using(ProjectSkill::class)
             ->withPivot(['sort_order'])
             ->withTimestamps()
             ->orderByPivot('sort_order');

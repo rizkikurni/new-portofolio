@@ -1,11 +1,9 @@
 import Section from '../UI/Section';
 import ScrollReveal from '../UI/ScrollReveal';
 
-export default function Skills({ skillsByCategory = {}, skills = [] }) {
-    const categories = Object.entries(skillsByCategory || {});
-    if (categories.length === 0 && skills.length === 0) return null;
-
-    const groups = categories.length > 0 ? categories : [['Technologies', skills]];
+export default function Skills({ skillsByCategory = {} }) {
+    const groups = Object.entries(skillsByCategory || {});
+    if (groups.length === 0) return null;
 
     return (
         <Section id="skills" tag="Capabilities" title="Tools I use to turn ideas into reliable products." subtitle="The highlighted technologies are the ones most relevant to this role and portfolio profile.">

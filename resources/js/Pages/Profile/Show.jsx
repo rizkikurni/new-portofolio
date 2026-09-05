@@ -16,7 +16,6 @@ export default function Show({
     profile = {},
     sections = [],
     projects = [],
-    skills = [],
     skills_by_category = {},
     experiences = [],
     educations = [],
@@ -30,7 +29,6 @@ export default function Show({
                 key="hero"
                 profile={profile}
                 socialLinks={social_links}
-                skills={skills}
                 hasProjects={projects.length > 0}
             />
         ),
@@ -38,7 +36,7 @@ export default function Show({
             <About key="about" aboutText={profile.about} />
         ),
         skills: (
-            <Skills key="skills" skillsByCategory={skills_by_category} skills={skills} />
+            <Skills key="skills" skillsByCategory={skills_by_category} />
         ),
         projects: (
             <Projects key="projects" projects={projects} />
@@ -67,7 +65,7 @@ export default function Show({
     const sectionHasContent = {
         hero: true,
         about: Boolean(profile.about),
-        skills: Object.keys(skills_by_category || {}).length > 0 || skills.length > 0,
+        skills: Object.keys(skills_by_category || {}).length > 0,
         projects: projects.length > 0,
         experience: experiences.length > 0,
         education: educations.length > 0,

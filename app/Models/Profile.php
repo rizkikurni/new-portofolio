@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Pivots\ProfileExperience;
+use App\Models\Pivots\ProfileProject;
+use App\Models\Pivots\ProfileSkill;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -29,7 +32,7 @@ class Profile extends Model
 
     protected $casts = [
         'is_default' => 'boolean',
-        'is_active'  => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     // -------------------------------------------------------------------------
@@ -45,6 +48,7 @@ class Profile extends Model
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'profile_project')
+            ->using(ProfileProject::class)
             ->withPivot(['sort_order', 'is_featured'])
             ->withTimestamps()
             ->orderByPivot('sort_order');
@@ -53,6 +57,7 @@ class Profile extends Model
     public function skills(): BelongsToMany
     {
         return $this->belongsToMany(Skill::class, 'profile_skill')
+            ->using(ProfileSkill::class)
             ->withPivot(['sort_order', 'is_featured'])
             ->withTimestamps()
             ->orderByPivot('sort_order');
@@ -61,6 +66,7 @@ class Profile extends Model
     public function experiences(): BelongsToMany
     {
         return $this->belongsToMany(Experience::class, 'profile_experience')
+            ->using(ProfileExperience::class)
             ->withPivot(['sort_order'])
             ->withTimestamps()
             ->orderByPivot('sort_order');
@@ -87,6 +93,7 @@ class Profile extends Model
     public function featuredProjects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'profile_project')
+            ->using(ProfileProject::class)
             ->withPivot(['sort_order', 'is_featured'])
             ->withTimestamps()
             ->wherePivot('is_featured', true)
@@ -99,6 +106,7 @@ class Profile extends Model
     public function featuredSkills(): BelongsToMany
     {
         return $this->belongsToMany(Skill::class, 'profile_skill')
+            ->using(ProfileSkill::class)
             ->withPivot(['sort_order', 'is_featured'])
             ->withTimestamps()
             ->wherePivot('is_featured', true)
