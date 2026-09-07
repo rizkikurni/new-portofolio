@@ -17,7 +17,7 @@ export default function Certifications({ certifications = [] }) {
                     <ScrollReveal
                         key={cert.id}
                         variant="rise"
-                        delay={350 + (index % 3) * 120}
+                        delay={250 + (index % 3) * 80}
                         className="bg-dark-700 border border-dark-600/80 rounded-3xl p-6 sm:p-7 flex flex-col justify-between"
                     >
                         <div className="space-y-3">
@@ -25,16 +25,16 @@ export default function Certifications({ certifications = [] }) {
                                 <div className="w-10 h-10 rounded-xl bg-dark-600 flex items-center justify-center text-accent-500">
                                     <Award className="w-5 h-5" />
                                 </div>
-                                <span className="text-xs font-mono text-gray-500 lg:text-sm">
+                                <span className="font-mono text-xs text-gray-500 md:text-sm">
                                     {cert.issue_date}
                                 </span>
                             </div>
 
                             <div>
-                                <h3 className="text-base font-bold text-white leading-snug lg:text-lg">
+                                <h3 className="text-base font-bold leading-snug text-white md:text-lg">
                                     {cert.name}
                                 </h3>
-                                <p className="text-xs text-gray-400 font-medium mt-1 lg:text-sm">
+                                <p className="mt-1 text-xs font-medium text-gray-400 md:text-sm">
                                     {cert.issuer}
                                 </p>
                             </div>
@@ -46,7 +46,7 @@ export default function Certifications({ certifications = [] }) {
                                     href={cert.credential_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent-500 hover:text-accent-400 transition-colors lg:text-sm"
+                                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent-500 transition-colors hover:text-accent-400 md:text-sm"
                                 >
                                     <span>Verify Credential</span>
                                     <ExternalLink className="w-3.5 h-3.5" />

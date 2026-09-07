@@ -206,7 +206,7 @@ class PortfolioDataService
                 'id' => $certification->id,
                 'name' => $certification->name,
                 'issuer' => $certification->issuer,
-                'issue_date' => $certification->issue_date?->format('M Y'),
+                'issue_date' => $certification->issue_date?->format('Y'),
                 'credential_url' => $certification->credential_url,
             ])
             ->values()

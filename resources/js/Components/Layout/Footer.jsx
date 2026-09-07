@@ -6,12 +6,12 @@ export default function Footer({ profile = {}, socialLinks = [] }) {
     const name = profile.name || 'Portfolio';
 
     return (
-        <footer className="border-t border-dark-600/60 bg-dark-900/80 py-10 mt-20">
+        <footer className="mt-20 border-t border-dark-600/60 bg-dark-900/80 py-10 md:py-12">
             <Container>
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
                     {/* Brand / Name */}
                     <div className="flex items-center gap-3">
-                        <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold lg:text-sm ${profile.logo_url ? 'overflow-hidden' : 'bg-accent-500 text-dark-900'}`}>
+                        <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold md:text-sm ${profile.logo_url ? 'overflow-hidden' : 'bg-accent-500 text-dark-900'}`}>
                             {profile.logo_url ? (
                                 <img src={profile.logo_url} alt="" className="h-full w-full object-contain" />
                             ) : (
@@ -20,13 +20,13 @@ export default function Footer({ profile = {}, socialLinks = [] }) {
                                 </svg>
                             )}
                         </div>
-                        <span className="text-sm font-semibold text-white tracking-wide lg:text-base">
+                        <span className="text-sm font-semibold tracking-wide text-white md:text-base">
                             {name}
                         </span>
                     </div>
 
                     {/* Copyright */}
-                    <p className="text-xs text-gray-500 text-center sm:text-left lg:text-sm">
+                    <p className="text-center text-xs text-gray-500 sm:text-left md:text-sm">
                         &copy; {currentYear} {name}. All rights reserved.
                     </p>
 

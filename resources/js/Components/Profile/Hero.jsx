@@ -69,7 +69,7 @@ export default function Hero({
                     w-full
                     max-w-[1600px]
                     px-[6%]
-                    lg:block
+                    xl:block
                 "
             >
                 <div
@@ -389,16 +389,26 @@ export default function Hero({
                     px-6
                     pt-28
                     sm:px-10
-                    lg:hidden
+                    md:grid
+                    md:max-w-none
+                    md:grid-cols-[0.92fr_1.08fr]
+                    md:grid-rows-[auto_1fr]
+                    md:items-center
+                    md:gap-x-10
+                    md:gap-y-6
+                    md:px-[6%]
+                    md:pb-10
+                    xl:hidden
                 "
             >
                 {/* Name */}
-                <div className="relative z-30">
+                <div className="relative z-30 md:col-span-2">
                     <h1
                         className="
                             hero-name
                             font-display
                             text-[clamp(3.8rem,15vw,6rem)]
+                            md:text-[clamp(4.5rem,10vw,6.5rem)]
                             font-extrabold
                             leading-[0.84]
                             tracking-[-0.06em]
@@ -437,6 +447,10 @@ export default function Hero({
                         min-h-[350px]
                         justify-center
                         overflow-hidden
+                        md:mt-0
+                        md:h-[52svh]
+                        md:min-h-[390px]
+                        md:self-end
                     "
                 >
                     {profile.avatar ? (
@@ -482,6 +496,11 @@ export default function Hero({
                         border-t
                         border-white/[0.06]
                         py-10
+                        md:self-center
+                        md:border-l
+                        md:border-t-0
+                        md:py-0
+                        md:pl-8
                     "
                 >
                     <div
@@ -491,6 +510,7 @@ export default function Hero({
                             items-center
                             gap-3
                             text-[9px]
+                            md:text-[10px]
                             font-semibold
                             uppercase
                             tracking-[0.28em]
@@ -514,6 +534,7 @@ export default function Hero({
                             tracking-[-0.03em]
                             text-white
                             sm:text-3xl
+                            md:text-[2rem]
                         "
                     >
                         {title}
@@ -532,6 +553,8 @@ export default function Hero({
                             text-sm
                             leading-7
                             text-gray-400
+                            md:text-base
+                            md:leading-8
                         "
                     >
                         {cleanIntro.length > 180
@@ -562,6 +585,7 @@ export default function Hero({
                                     text-sm
                                     font-semibold
                                     text-accent-500
+                                    md:text-base
                                 "
                             >
                                 My story
@@ -581,6 +605,7 @@ export default function Hero({
                                     gap-2
                                     text-sm
                                     text-gray-400
+                                    md:text-base
                                 "
                             >
                                 <Download className="h-4 w-4" />
@@ -610,6 +635,7 @@ export default function Hero({
                                 gap-2
                                 text-xs
                                 text-gray-500
+                                md:text-sm
                             "
                         >
                             <Mail className="h-4 w-4 text-accent-500" />

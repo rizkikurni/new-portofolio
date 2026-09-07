@@ -11,16 +11,16 @@ export default function Skills({ skillsByCategory = {} }) {
                 {groups.map(([category, categorySkills], groupIndex) => (
                     <article
                         key={category}
-                        className="grid items-start gap-6 border-b border-white/10 px-6 py-7 last:border-0 sm:px-8 md:grid-cols-[0.3fr_1fr] md:gap-8 lg:px-10 lg:py-9"
+                        className="grid items-start gap-6 border-b border-white/10 px-6 py-7 last:border-0 sm:px-8 md:grid-cols-[0.28fr_1fr] md:gap-8 md:px-9 md:py-8 xl:px-10 xl:py-9"
                     >
-                        <ScrollReveal variant="from-left" delay={350}>
-                            <span className="font-mono text-xs font-semibold text-accent-500 lg:text-sm">
+                        <ScrollReveal variant="from-left" delay={250}>
+                            <span className="font-mono text-xs font-semibold text-accent-500 md:text-sm">
                                 {String(groupIndex + 1).padStart(2, '0')}
                             </span>
-                            <h3 className="mt-2 text-sm font-bold uppercase tracking-[0.14em] text-white lg:text-base">
+                            <h3 className="mt-2 text-sm font-bold uppercase tracking-[0.14em] text-white md:text-base">
                                 {category}
                             </h3>
-                            <p className="mt-2 text-xs text-gray-500 lg:text-sm">
+                            <p className="mt-2 text-xs text-gray-500 md:text-sm">
                                 {categorySkills.length} {categorySkills.length === 1 ? 'technology' : 'technologies'}
                             </p>
                         </ScrollReveal>
@@ -32,19 +32,19 @@ export default function Skills({ skillsByCategory = {} }) {
                                     <ScrollReveal
                                         key={skill.id}
                                         variant={groupIndex % 2 === 0 ? 'rise' : 'zoom'}
-                                        delay={450 + (skillIndex % 3) * 100}
-                                        className={`flex min-h-14 items-start justify-between gap-3 rounded-xl border px-4 py-3.5 ${
+                                        delay={320 + (skillIndex % 3) * 70}
+                                        className={`flex min-h-14 items-start justify-between gap-3 rounded-xl border px-4 py-3.5 md:min-h-16 ${
                                             skill.is_featured
                                                 ? 'border-accent-500/30 bg-accent-500/[0.06]'
                                                 : 'border-white/[0.07] bg-white/[0.025]'
                                         }`}
                                     >
                                         <div className="min-w-0">
-                                            <p className={`text-sm font-semibold lg:text-base ${skill.is_featured ? 'text-white' : 'text-gray-300'}`}>
+                                            <p className={`text-sm font-semibold md:text-base ${skill.is_featured ? 'text-white' : 'text-gray-300'}`}>
                                                 {skill.name}
                                             </p>
                                             {skill.description && (
-                                                <p className="mt-1 line-clamp-2 text-xs leading-5 text-gray-500 lg:text-sm lg:leading-6">
+                                                <p className="mt-1 line-clamp-2 text-xs leading-5 text-gray-500 md:text-sm md:leading-6">
                                                     {skill.description}
                                                 </p>
                                             )}

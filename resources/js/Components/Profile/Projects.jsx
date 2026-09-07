@@ -22,7 +22,7 @@ export default function Projects({ projects = [] }) {
                     <ScrollReveal
                         key={project.id}
                         variant={index % 2 === 0 ? 'from-left' : 'from-right'}
-                        delay={350 + Math.min(index, 2) * 120}
+                        delay={250 + Math.min(index, 2) * 80}
                     >
                         <ProjectCard project={project} index={index} />
                     </ScrollReveal>

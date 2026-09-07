@@ -81,7 +81,7 @@ class CertificationResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('issue_date')
-                    ->date('M Y')
+                    ->date('Y')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('expiration_date')
@@ -111,9 +111,9 @@ class CertificationResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListCertifications::route('/'),
+            'index' => Pages\ListCertifications::route('/'),
             'create' => Pages\CreateCertification::route('/create'),
-            'edit'   => Pages\EditCertification::route('/{record}/edit'),
+            'edit' => Pages\EditCertification::route('/{record}/edit'),
         ];
     }
 
