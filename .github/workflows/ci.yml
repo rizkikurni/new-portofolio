@@ -1,5 +1,7 @@
 name: CI
 
+# CI dijalankan saat ada perubahan ke main, pull request ke main,
+# atau ketika dijalankan secara manual dari halaman GitHub Actions.
 on:
   push:
     branches:
@@ -9,19 +11,24 @@ on:
       - main
   workflow_dispatch:
 
+# Workflow hanya perlu membaca isi repository.
 permissions:
   contents: read
 
+# Jika ada push baru pada branch yang sama, hentikan CI lama agar runner
+# tidak menguji commit yang sudah tidak terbaru.
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # Job ini menjadi gerbang kualitas sebelum workflow Deploy boleh berjalan.
   test-and-build:
     name: Test and build
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+    # MySQL ini hanya hidup sementara di runner GitHub dan bukan database VPS.
     services:
       mysql:
         image: mysql:8.4
@@ -36,6 +43,8 @@ jobs:
           --health-timeout=5s
           --health-retries=10
 
+    # Seluruh nilai di bawah khusus untuk pengujian di CI.
+    # Tidak ada kredensial database production yang digunakan.
     env:
       APP_ENV: testing
       CACHE_STORE: array
@@ -51,9 +60,11 @@ jobs:
       SESSION_DRIVER: array
 
     steps:
+      # Mengunduh source code dari commit yang sedang diuji ke runner.
       - name: Check out repository
         uses: actions/checkout@v7
 
+      # Menyediakan PHP dan ekstensi yang dibutuhkan Laravel pada runner.
       - name: Set up PHP
         uses: shivammathur/setup-php@2.37.2
         with:
@@ -61,29 +72,40 @@ jobs:
           extensions: ctype, curl, dom, fileinfo, filter, mbstring, openssl, pdo_mysql, tokenizer, xml
           coverage: none
 
+      # Menyediakan Node.js dan cache npm untuk proses build Vite.
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: npm
 
+      # Menginstal dependency PHP sesuai composer.lock agar hasilnya konsisten.
       - name: Install PHP dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
 
+      # npm ci memakai package-lock.json dan cocok untuk environment CI yang bersih.
       - name: Install frontend dependencies
         run: npm ci
 
+      # Membuat konfigurasi Laravel sementara, APP_KEY, dan struktur database test.
       - name: Prepare Laravel
         run: |
+          # .env ini hanya berada di runner sementara dan akan hilang setelah job selesai.
           cp .env.example .env
           php artisan key:generate --force
+
+          # Migrasi dijalankan terhadap service MySQL portfolio_test di atas.
           php artisan migrate --force
 
+      # Memastikan semua file PHP memiliki sintaks yang valid sebelum test dijalankan.
       - name: Check PHP syntax
         run: find app bootstrap config database routes tests -name '*.php' -print0 | xargs -0 -n1 php -l
 
+      # Menjalankan unit test dan feature test Laravel.
+      # Jika satu test gagal, job berhenti dan deployment tidak akan dipicu.
       - name: Run Laravel tests
         run: php artisan test
 
+      # Memastikan React, Tailwind CSS, dan Vite dapat dikompilasi untuk production.
       - name: Build frontend assets
         run: npm run build

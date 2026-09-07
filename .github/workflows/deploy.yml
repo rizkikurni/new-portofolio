@@ -1,5 +1,7 @@
 name: Deploy
 
+# CD menunggu workflow bernama CI selesai. Workflow ini tidak langsung
+# berjalan hanya karena ada pull request atau commit yang belum lulus test.
 on:
   workflow_run:
     workflows:
@@ -7,9 +9,12 @@ on:
     types:
       - completed
 
+# Deployment tidak perlu menulis ke repository GitHub.
 permissions:
   contents: read
 
+# Deployment tidak boleh saling membatalkan atau berjalan bersamaan karena
+# dapat meninggalkan aplikasi dalam keadaan maintenance atau setengah terpasang.
 concurrency:
   group: production-deployment
   cancel-in-progress: false
@@ -17,6 +22,10 @@ concurrency:
 jobs:
   deploy:
     name: Deploy to production
+
+    # Empat kondisi ini memastikan deployment hanya berasal dari:
+    # 1. CI yang sukses, 2. event push, 3. branch main, dan 4. repository ini sendiri.
+    # Pull request dari fork tidak dapat menggunakan secret VPS.
     if: >-
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'push' &&
@@ -24,21 +33,47 @@ jobs:
       github.event.workflow_run.head_repository.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 15
+
+    # GitHub akan menampilkan URL production pada halaman deployment.
     environment:
       name: production
       url: https://rizkikurni.my.id
 
     steps:
+      # Menyiapkan private key di runner agar runner dapat login ke VPS.
+      # Public key pasangannya harus berada di authorized_keys milik user deploy.
       - name: Configure SSH
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
-          install -m 700 -d ~/.ssh
-          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -p 22 -H "$VPS_HOST" >> ~/.ssh/known_hosts
+          # Berhenti dengan pesan yang jelas jika secret belum diisi.
+          test -n "$VPS_HOST" || {
+            echo "VPS_HOST secret is empty."
+            exit 1
+          }
 
+          test -n "$VPS_SSH_KEY" || {
+            echo "VPS_SSH_KEY secret is empty."
+            exit 1
+          }
+
+          # Private key ditulis ke file sementara dengan permission khusus pemilik.
+          # tr menghapus karakter CR jika key disalin dari Windows.
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" | tr -d '\r' > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+          # Pastikan secret benar-benar private key OpenSSH tanpa passphrase.
+          ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null || {
+            echo "VPS_SSH_KEY is not a valid unencrypted OpenSSH private key."
+            exit 1
+          }
+
+          # Simpan identitas host VPS agar koneksi SSH non-interaktif dapat dibuat.
+          ssh-keyscan -T 10 -p 22 -H "$VPS_HOST" >> ~/.ssh/known_hosts
+
+      # Membuka koneksi SSH dan menjalankan seluruh perintah di VPS.
       - name: Deploy application
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
@@ -49,14 +84,19 @@ jobs:
             -p 22 \
             -o BatchMode=yes \
             "$VPS_USER@$VPS_HOST" 'bash -se' <<'DEPLOY_SCRIPT'
+              # -E mempertahankan error trap, -e berhenti saat gagal,
+              # -u menolak variabel kosong, dan pipefail menangkap error dalam pipe.
               set -Eeuo pipefail
 
+              # Lokasi dan binary dibuat eksplisit agar tidak memakai versi PHP
+              # milik project Laravel lain yang mungkin terpasang di VPS.
               APP_DIR=/var/www/new-portofolio
               PHP_BIN=/usr/bin/php8.3
               COMPOSER_BIN=/usr/local/bin/composer
 
               cd "$APP_DIR"
 
+              # Jangan lanjut jika folder deployment belum disiapkan dengan benar.
               test -d .git || {
                 echo "Deployment failed: $APP_DIR is not a Git repository."
                 exit 1
@@ -67,13 +107,19 @@ jobs:
                 exit 1
               }
 
+              # Tampilkan halaman maintenance selama file dan database diperbarui.
               "$PHP_BIN" artisan down --retry=10
+
+              # Jika perintah setelah ini gagal, trap tetap mengaktifkan aplikasi
+              # kembali sehingga website tidak terkunci dalam maintenance mode.
               trap '"$PHP_BIN" artisan up' EXIT
 
+              # Ambil commit main terbaru tanpa menimpa perubahan lokal secara paksa.
               git fetch origin main
               git checkout main
               git pull --ff-only origin main
 
+              # Instal dependency PHP production; package development tidak dikirim.
               "$PHP_BIN" "$COMPOSER_BIN" install \
                 --no-dev \
                 --prefer-dist \
@@ -81,16 +127,25 @@ jobs:
                 --no-progress \
                 --optimize-autoloader
 
+              # Instal dependency frontend yang terkunci lalu hasilkan aset production.
               npm ci --no-audit --no-fund
               npm run build
 
+              # Terapkan migrasi baru tanpa menjalankan seeder atau menghapus data.
               "$PHP_BIN" artisan migrate --force
+
+              # Pastikan URL /storage tetap terhubung ke storage/app/public.
               "$PHP_BIN" artisan storage:link || true
+
+              # Buang cache versi lama, lalu buat cache production yang baru.
               "$PHP_BIN" artisan optimize:clear
               "$PHP_BIN" artisan config:cache
               "$PHP_BIN" artisan route:cache
               "$PHP_BIN" artisan view:cache
 
+              # Aktifkan aplikasi setelah seluruh proses berhasil.
               "$PHP_BIN" artisan up
+
+              # Hapus trap karena aplikasi sudah berhasil diaktifkan secara normal.
               trap - EXIT
           DEPLOY_SCRIPT
