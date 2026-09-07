@@ -12,7 +12,7 @@ export default function About({ aboutText }) {
     if (!aboutText) return null;
 
     return (
-        <Section id="about" tag="About" title="A little context beyond the code." subtitle="What I value, how I approach product work, and the kind of developer I am becoming.">
+        <Section id="about" tag="About" title="A little context beyond the code. tes ci/cd" subtitle="What I value, how I approach product work, and the kind of developer I am becoming.">
             <div className="grid gap-8 md:grid-cols-[1fr_0.7fr] md:gap-10 xl:grid-cols-[1fr_0.65fr] xl:gap-14">
                 <ScrollReveal
                     variant="from-left"
