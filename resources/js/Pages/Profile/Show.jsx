@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import SeoHead from '../../Components/SeoHead';
 import Navbar from '../../Components/Layout/Navbar';
 import Footer from '../../Components/Layout/Footer';
 import Container from '../../Components/Layout/Container';
@@ -21,6 +21,7 @@ export default function Show({
     educations = [],
     certifications = [],
     social_links = [],
+    seo,
 }) {
     // Map section key to its React component renderer
     const sectionComponentMap = {
@@ -82,14 +83,7 @@ export default function Show({
     return (
         <div className="min-h-screen overflow-x-hidden bg-dark-900 font-sans text-gray-300 antialiased selection:bg-accent-500/25 selection:text-white">
             {/* Dynamic SEO Meta Tags */}
-            <Head>
-                <title>{profile.meta_title || `${profile.name || 'Developer'} — ${profile.title || 'Portfolio'}`}</title>
-                <meta name="description" content={profile.meta_description || profile.tagline || ''} />
-                <meta property="og:title" content={profile.meta_title || `${profile.name || 'Developer'} — ${profile.title || 'Portfolio'}`} />
-                <meta property="og:description" content={profile.meta_description || profile.tagline || ''} />
-                {profile.og_image && <meta property="og:image" content={profile.og_image} />}
-                {profile.favicon_url && <link rel="icon" href={profile.favicon_url} />}
-            </Head>
+            <SeoHead seo={seo} />
 
             {/* Navbar */}
             <Navbar

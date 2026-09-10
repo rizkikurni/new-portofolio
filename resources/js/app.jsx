@@ -5,10 +5,9 @@ import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Developer Portfolio';
-
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    // Laravel supplies the complete SEO title for initial HTML and client visits.
+    title: (title) => title,
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.jsx`,

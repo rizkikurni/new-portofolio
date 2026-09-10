@@ -1,4 +1,5 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
+import SeoHead from '../../Components/SeoHead';
 import { ArrowLeft, ArrowUpRight, Calendar, CheckCircle2, Code2, Github } from 'lucide-react';
 import Navbar from '../../Components/Layout/Navbar';
 import Footer from '../../Components/Layout/Footer';
@@ -10,16 +11,12 @@ const caseStudySections = [
     { key: 'impact', eyebrow: 'The outcome', title: 'What the project achieved' },
 ];
 
-export default function Show({ project = {}, branding = {}, social_links = [] }) {
+export default function Show({ project = {}, branding = {}, social_links = [], seo }) {
     const hasCaseStudy = caseStudySections.some(({ key }) => project[key]);
 
     return (
         <div className="min-h-screen overflow-x-hidden bg-dark-900 font-sans text-gray-300 antialiased selection:bg-accent-500/25 selection:text-white">
-            <Head>
-                <title>{`${project.title || 'Project'} — Case Study`}</title>
-                <meta name="description" content={project.short_description || ''} />
-                {branding.favicon_url && <link rel="icon" href={branding.favicon_url} />}
-            </Head>
+            <SeoHead seo={seo} />
 
             <Navbar
                 title={branding.name || 'Portfolio'}

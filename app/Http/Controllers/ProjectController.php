@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\SocialLink;
 use App\Services\PortfolioDataService;
+use App\Services\SeoService;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ProjectController extends Controller
 {
-    public function __construct(private readonly PortfolioDataService $portfolioData) {}
+    public function __construct(
+        private readonly PortfolioDataService $portfolioData,
+        private readonly SeoService $seo,
+    ) {}
 
     /**
      * Display a specific project detail page by slug.
@@ -37,7 +41,7 @@ class ProjectController extends Controller
                 'icon' => $l->icon,
             ]);
 
-        return Inertia::render('Project/Show', [
+        $data = [
             'project' => [
                 'id' => $project->id,
                 'slug' => $project->slug,
@@ -71,6 +75,8 @@ class ProjectController extends Controller
             ],
             'branding' => $this->portfolioData->branding(),
             'social_links' => $socialLinks,
-        ]);
+        ];
+
+        return Inertia::render('Project/Show', [...$data, 'seo' => $this->seo->project($data)]);
     }
 }
