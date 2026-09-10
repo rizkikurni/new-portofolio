@@ -50,9 +50,9 @@ class PortfolioDataService
 
             return [
                 'name' => $profile->name,
-                'logo_url' => $profile->logo ? asset('storage/'.$profile->logo) : null,
-                'favicon_url' => $profile->favicon ? asset('storage/'.$profile->favicon) : null,
-                'resume_url' => $profile->resume_path ? asset('storage/'.$profile->resume_path) : null,
+                'logo_url' => $profile->logo ? '/storage/'.ltrim($profile->logo, '/') : null,
+                'favicon_url' => $profile->favicon ? '/storage/'.ltrim($profile->favicon, '/') : null,
+                'resume_url' => $profile->resume_path ? '/storage/'.ltrim($profile->resume_path, '/') : null,
                 'resume_label' => $profile->resume_label ?: 'Download CV',
             ];
         });
@@ -119,7 +119,7 @@ class PortfolioDataService
                 'short_description' => $project->short_description,
                 'role' => $project->role,
                 'impact' => $project->impact,
-                'thumbnail' => $project->thumbnail ? asset('storage/'.$project->thumbnail) : null,
+                'thumbnail' => $project->thumbnail ? '/storage/'.ltrim($project->thumbnail, '/') : null,
                 'status' => $project->status,
                 'start_date' => $project->start_date?->format('Y-m'),
                 'end_date' => $project->end_date?->format('Y-m'),
@@ -234,14 +234,18 @@ class PortfolioDataService
                 'about' => $profile->about,
                 'location' => $profile->location,
                 'email' => $profile->email,
-                'avatar' => $profile->avatar ? asset('storage/'.$profile->avatar) : null,
-                'logo_url' => $profile->logo ? asset('storage/'.$profile->logo) : null,
-                'favicon_url' => $profile->favicon ? asset('storage/'.$profile->favicon) : null,
-                'resume_url' => $profile->resume_path ? asset('storage/'.$profile->resume_path) : null,
+                // Keep cached local file URLs independent of the request host.
+                'avatar' => $profile->avatar ? '/storage/'.ltrim($profile->avatar, '/') : null,
+                'logo_url' => $profile->logo ? '/storage/'.ltrim($profile->logo, '/') : null,
+                'favicon_url' => $profile->favicon ? '/storage/'.ltrim($profile->favicon, '/') : null,
+                'resume_url' => $profile->resume_path ? '/storage/'.ltrim($profile->resume_path, '/') : null,
                 'resume_label' => $profile->resume_label ?: 'Download CV',
                 'meta_title' => $profile->meta_title ?? "{$profile->name} — {$profile->title}",
                 'meta_description' => $profile->meta_description ?? $profile->tagline,
-                'og_image' => $profile->og_image ? asset('storage/'.$profile->og_image) : null,
+                // Social metadata needs an absolute URL using the configured origin.
+                'og_image' => $profile->og_image
+                    ? rtrim(config('app.url'), '/').'/storage/'.ltrim($profile->og_image, '/')
+                    : null,
                 'is_default' => (bool) $profile->is_default,
             ],
             'sections' => $sections,

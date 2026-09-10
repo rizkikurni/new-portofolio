@@ -7,7 +7,9 @@ use App\Models\Project;
 use App\Models\ProjectMedia;
 use App\Models\Skill;
 use App\Models\User;
+use App\Services\PortfolioDataService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class PortfolioTest extends TestCase
@@ -30,6 +32,11 @@ class PortfolioTest extends TestCase
                 ->has('profile')
                 ->where('profile.slug', 'frontend')
                 ->where('profile.is_default', true)
+                ->where('profile.avatar', null)
+                ->where('profile.logo_url', null)
+                ->where('profile.favicon_url', null)
+                ->where('profile.resume_url', null)
+                ->where('profile.og_image', null)
                 ->where('sections.0.key', 'hero')
                 ->where('sections.1.key', 'projects')
         );
@@ -103,8 +110,82 @@ class PortfolioTest extends TestCase
             ->assertOk()
             ->assertInertia(fn ($page) => $page
                 ->where('profile.resume_label', 'Download Frontend CV')
-                ->where('profile.resume_url', asset('storage/resumes/frontend-cv.pdf'))
+                ->where('profile.resume_url', '/storage/resumes/frontend-cv.pdf')
             );
+    }
+
+    public function test_cached_profile_file_urls_do_not_leak_the_request_host(): void
+    {
+        config(['app.url' => 'https://portfolio.example/']);
+
+        $profile = Profile::where('slug', 'frontend')->firstOrFail();
+        $profile->update([
+            'avatar' => '/profiles/avatar.webp',
+            'logo' => 'branding/logo.webp',
+            'favicon' => 'branding/favicon.png',
+            'resume_path' => 'resumes/cv.pdf',
+            'og_image' => '/profiles/social.webp',
+        ]);
+        Project::where('slug', 'portfolio-platform')->firstOrFail()
+            ->update(['thumbnail' => '/projects/preview.webp']);
+
+        $assertPayload = fn ($page) => $page
+            ->component('Profile/Show')
+            ->where('profile.avatar', '/storage/profiles/avatar.webp')
+            ->where('profile.logo_url', '/storage/branding/logo.webp')
+            ->where('profile.favicon_url', '/storage/branding/favicon.png')
+            ->where('profile.resume_url', '/storage/resumes/cv.pdf')
+            ->where('profile.og_image', 'https://portfolio.example/storage/profiles/social.webp')
+            ->where('projects.0.thumbnail', '/storage/projects/preview.webp');
+
+        // Warm both independent cache entries using an IP request.
+        foreach (['/', '/profile/frontend'] as $path) {
+            $this->get('https://192.0.2.10'.$path)->assertOk()->assertInertia($assertPayload);
+        }
+
+        // Bypass model events deliberately: the domain must read the cached payload,
+        // not rebuild it with its own host and accidentally hide the regression.
+        DB::table('profiles')->where('id', $profile->id)->update(['avatar' => 'profiles/new.webp']);
+
+        foreach (['/', '/profile/frontend'] as $path) {
+            $this->get('https://portfolio.example'.$path)->assertOk()->assertInertia($assertPayload);
+        }
+
+        // This is also the invalidation used by deployment, regardless of default store.
+        app(PortfolioDataService::class)->invalidate();
+        $this->get('https://portfolio.example/')->assertOk()->assertInertia(fn ($page) => $page
+            ->where('profile.avatar', '/storage/profiles/new.webp')
+        );
+    }
+
+    public function test_project_images_and_cached_branding_use_relative_urls_across_hosts(): void
+    {
+        $profile = Profile::where('slug', 'frontend')->firstOrFail();
+        $profile->update([
+            'logo' => '/branding/logo.webp',
+            'favicon' => 'branding/favicon.png',
+            'resume_path' => 'resumes/cv.pdf',
+        ]);
+        $project = Project::where('slug', 'phishguard')->firstOrFail();
+        $project->update(['thumbnail' => '/projects/preview.webp']);
+        ProjectMedia::create([
+            'project_id' => $project->id,
+            'file_path' => '/projects/gallery/screenshot.webp',
+            'sort_order' => 0,
+        ]);
+
+        foreach (['https://192.0.2.10', 'https://portfolio.example'] as $origin) {
+            $this->get($origin.'/projects/phishguard')->assertOk()->assertInertia(fn ($page) => $page
+                ->component('Project/Show')
+                ->where('project.thumbnail', '/storage/projects/preview.webp')
+                ->where('project.media.0.url', '/storage/projects/gallery/screenshot.webp')
+                ->where('branding.logo_url', '/storage/branding/logo.webp')
+                ->where('branding.favicon_url', '/storage/branding/favicon.png')
+                ->where('branding.resume_url', '/storage/resumes/cv.pdf')
+            );
+
+            DB::table('profiles')->where('id', $profile->id)->update(['logo' => 'branding/new.webp']);
+        }
     }
 
     public function test_profile_duplication_copies_relations_without_duplicating_global_records(): void

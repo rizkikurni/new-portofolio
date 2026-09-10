@@ -143,6 +143,10 @@ jobs:
               "$PHP_BIN" artisan route:cache
               "$PHP_BIN" artisan view:cache
 
+              # Cache portfolio dapat memakai store berbeda dari CACHE_STORE.
+              # Batalkan payload lama agar URL/data memakai implementasi terbaru.
+              "$PHP_BIN" artisan tinker --execute='app(\App\Services\PortfolioDataService::class)->invalidate();'
+
               # Aktifkan aplikasi setelah seluruh proses berhasil.
               "$PHP_BIN" artisan up
 

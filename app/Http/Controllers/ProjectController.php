@@ -48,7 +48,7 @@ class ProjectController extends Controller
                 'challenge' => $project->challenge,
                 'solution' => $project->solution,
                 'impact' => $project->impact,
-                'thumbnail' => $project->thumbnail ? asset('storage/'.$project->thumbnail) : null,
+                'thumbnail' => $project->thumbnail ? '/storage/'.ltrim($project->thumbnail, '/') : null,
                 'github_url' => $project->github_url,
                 'demo_url' => $project->demo_url,
                 'status' => $project->status,
@@ -62,7 +62,7 @@ class ProjectController extends Controller
                 ]),
                 'media' => $project->media->map(fn ($media) => [
                     'id' => $media->id,
-                    'url' => asset('storage/'.$media->file_path),
+                    'url' => '/storage/'.ltrim($media->file_path, '/'),
                     'type' => $media->media_type,
                     'alt_text' => $media->alt_text,
                     'caption' => $media->caption,
