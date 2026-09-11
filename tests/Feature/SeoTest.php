@@ -98,10 +98,10 @@ class SeoTest extends TestCase
 
     public function test_robots_advertises_sitemap_and_admin_is_noindex(): void
     {
-        $this->get('/robots.txt')->assertOk()
+        $this->get('https://192.0.2.10/robots.txt')->assertOk()
             ->assertHeader('Content-Type', 'text/plain; charset=UTF-8')
-            ->assertSee('Sitemap: https://rizkikurni.my.id/sitemap.xml', false)
-            ->assertDontSee('portfolio.example');
+            ->assertSee('Sitemap: https://portfolio.example/sitemap.xml', false)
+            ->assertDontSee('192.0.2.10');
         $this->get('/admin/login')->assertOk()->assertHeader('X-Robots-Tag', 'noindex, nofollow');
         $this->get('/projects/non-existent')->assertNotFound();
     }
