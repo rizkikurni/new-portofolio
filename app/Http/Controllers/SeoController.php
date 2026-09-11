@@ -32,11 +32,10 @@ class SeoController extends Controller
             ->header('Content-Type', 'application/xml; charset=UTF-8');
     }
 
-    public function robots(): Response
+    public function robots(SeoService $seo): Response
     {
         // Allow crawling so Google can see the noindex headers on private endpoints.
-        // Keep the sitemap address fixed while investigating Search Console fetch errors.
-        return response("User-agent: *\nAllow: /\n\nSitemap: https://rizkikurni.my.id/sitemap.xml\n")
+        return response("User-agent: *\nAllow: /\n\nSitemap: ".$seo->url('sitemap.xml')."\n")
             ->header('Content-Type', 'text/plain; charset=UTF-8');
     }
 }
