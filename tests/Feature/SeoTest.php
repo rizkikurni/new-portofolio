@@ -100,7 +100,8 @@ class SeoTest extends TestCase
     {
         $this->get('/robots.txt')->assertOk()
             ->assertHeader('Content-Type', 'text/plain; charset=UTF-8')
-            ->assertSee('Sitemap: https://portfolio.example/sitemap.xml', false);
+            ->assertSee('Sitemap: https://rizkikurni.my.id/sitemap.xml', false)
+            ->assertDontSee('portfolio.example');
         $this->get('/admin/login')->assertOk()->assertHeader('X-Robots-Tag', 'noindex, nofollow');
         $this->get('/projects/non-existent')->assertNotFound();
     }
