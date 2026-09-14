@@ -35,7 +35,7 @@ class SeoController extends Controller
     public function robots(SeoService $seo): Response
     {
         // Allow crawling so Google can see the noindex headers on private endpoints.
-        return response("User-agent: *\nAllow: /\n\nSitemap: ".$seo->url('sitemap.xml')."\n")
+        return response("User-agent: *\nAllow: /\n\nSitemap: ".$seo->url('sitemap.xml')."\nSitemap: ".$seo->url('newsitemap.xml')."\n")
             ->header('Content-Type', 'text/plain; charset=UTF-8');
     }
 }
