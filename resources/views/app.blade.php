@@ -6,7 +6,7 @@
         @if (isset($page['props']['seo']))
             @include('partials.seo', ['seo' => $page['props']['seo']])
         @endif
-        <script>
+        <script type="text/javascript">
             (function () {
                 try {
                     const stored = localStorage.getItem('portfolio_theme');
