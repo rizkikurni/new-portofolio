@@ -7,20 +7,20 @@ export default function Skills({ skillsByCategory = {} }) {
 
     return (
         <Section id="skills" tag="Capabilities" title="Tools I use to turn ideas into reliable products." subtitle="The highlighted technologies are the ones most relevant to this role and portfolio profile.">
-            <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-dark-800">
+            <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition-colors dark:border-white/10 dark:bg-dark-800 dark:shadow-none">
                 {groups.map(([category, categorySkills], groupIndex) => (
                     <article
                         key={category}
-                        className="grid items-start gap-6 border-b border-white/10 px-6 py-7 last:border-0 sm:px-8 md:grid-cols-[0.28fr_1fr] md:gap-8 md:px-9 md:py-8 xl:px-10 xl:py-9"
+                        className="grid items-start gap-6 border-b border-slate-200 px-6 py-7 transition-colors last:border-0 dark:border-white/10 sm:px-8 md:grid-cols-[0.28fr_1fr] md:gap-8 md:px-9 md:py-8 xl:px-10 xl:py-9"
                     >
                         <ScrollReveal variant="from-left" delay={250}>
                             <span className="font-mono text-xs font-semibold text-accent-500 md:text-sm">
                                 {String(groupIndex + 1).padStart(2, '0')}
                             </span>
-                            <h3 className="mt-2 text-sm font-bold uppercase tracking-[0.14em] text-white md:text-base">
+                            <h3 className="mt-2 text-sm font-bold uppercase tracking-[0.14em] text-slate-900 transition-colors dark:text-white md:text-base">
                                 {category}
                             </h3>
-                            <p className="mt-2 text-xs text-gray-500 md:text-sm">
+                            <p className="mt-2 text-xs text-slate-500 transition-colors dark:text-gray-500 md:text-sm">
                                 {categorySkills.length} {categorySkills.length === 1 ? 'technology' : 'technologies'}
                             </p>
                         </ScrollReveal>
@@ -33,18 +33,18 @@ export default function Skills({ skillsByCategory = {} }) {
                                         key={skill.id}
                                         variant={groupIndex % 2 === 0 ? 'rise' : 'zoom'}
                                         delay={320 + (skillIndex % 3) * 70}
-                                        className={`flex min-h-14 items-start justify-between gap-3 rounded-xl border px-4 py-3.5 md:min-h-16 ${
+                                        className={`flex min-h-14 items-start justify-between gap-3 rounded-xl border px-4 py-3.5 transition-colors md:min-h-16 ${
                                             skill.is_featured
-                                                ? 'border-accent-500/30 bg-accent-500/[0.06]'
-                                                : 'border-white/[0.07] bg-white/[0.025]'
+                                                ? 'border-accent-500/30 bg-accent-500/[0.08] dark:bg-accent-500/[0.06]'
+                                                : 'border-slate-200 bg-slate-50/80 dark:border-white/[0.07] dark:bg-white/[0.025]'
                                         }`}
                                     >
                                         <div className="min-w-0">
-                                            <p className={`text-sm font-semibold md:text-base ${skill.is_featured ? 'text-white' : 'text-gray-300'}`}>
+                                            <p className={`text-sm font-semibold transition-colors md:text-base ${skill.is_featured ? 'text-accent-600 dark:text-white' : 'text-slate-800 dark:text-gray-300'}`}>
                                                 {skill.name}
                                             </p>
                                             {skill.description && (
-                                                <p className="mt-1 line-clamp-2 text-xs leading-5 text-gray-500 md:text-sm md:leading-6">
+                                                <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-500 transition-colors dark:text-gray-500 md:text-sm md:leading-6">
                                                     {skill.description}
                                                 </p>
                                             )}

@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: 'class',
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
@@ -15,22 +16,22 @@ export default {
             },
             colors: {
                 accent: {
-                    400: 'var(--accent-400)',
-                    500: 'var(--accent-500)',
-                    600: 'var(--accent-600)',
-                    DEFAULT: 'var(--accent-500)',
+                    400: '#ff9a7a',
+                    500: '#ff704d',
+                    600: '#e55738',
+                    DEFAULT: '#ff704d',
                 },
                 dark: {
-                    900: 'var(--dark-900)',
-                    800: 'var(--dark-800)',
-                    700: 'var(--dark-700)',
-                    600: 'var(--dark-600)',
-                    500: 'var(--dark-500)',
-                    DEFAULT: 'var(--dark-900)',
+                    900: '#18191d',
+                    800: '#202126',
+                    700: '#292b31',
+                    600: '#3a3d45',
+                    500: '#4b4f59',
+                    DEFAULT: '#18191d',
                 },
             },
             borderColor: {
-                DEFAULT: 'var(--border-color)',
+                DEFAULT: '#3a3d45',
             },
         },
     },

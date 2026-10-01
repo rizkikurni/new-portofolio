@@ -33,8 +33,12 @@ export default function Hero({
                 min-h-[100svh]
                 overflow-hidden
                 border-b
-                border-white/5
-                bg-dark-800
+                border-slate-200
+                bg-white
+                transition-colors
+                duration-200
+                dark:border-white/5
+                dark:bg-dark-800
             "
         >
             {/* Background */}
@@ -102,7 +106,9 @@ export default function Hero({
                                     font-extrabold
                                     leading-[0.82]
                                     tracking-[-0.06em]
-                                    text-white
+                                    text-slate-900
+                                    transition-colors
+                                    dark:text-white
                                 "
                             >
                                 <span className="block">
@@ -169,10 +175,11 @@ export default function Hero({
                                     font-semibold
                                     uppercase
                                     tracking-[0.28em]
-                                    text-gray-500
+                                    text-slate-500
+                                    dark:text-gray-500
                                 "
                             >
-                                <span className="h-px w-7 bg-gray-600" />
+                                <span className="h-px w-7 bg-slate-300 dark:bg-gray-600" />
 
                                 <span>
                                     Introduction
@@ -187,7 +194,9 @@ export default function Hero({
                                     font-semibold
                                     leading-[1.07]
                                     tracking-[-0.035em]
-                                    text-white
+                                    text-slate-900
+                                    transition-colors
+                                    dark:text-white
                                 "
                             >
                                 {title}
@@ -212,7 +221,9 @@ export default function Hero({
                                     max-w-[400px]
                                     text-base
                                     leading-7
-                                    text-gray-400
+                                    text-slate-600
+                                    transition-colors
+                                    dark:text-gray-400
                                 "
                             >
                                 {cleanIntro.length > 180
@@ -274,10 +285,12 @@ export default function Hero({
                                             gap-2
                                             text-base
                                             font-medium
-                                            text-gray-500
+                                            text-slate-600
                                             transition-colors
                                             duration-300
-                                            hover:text-white
+                                            hover:text-slate-900
+                                            dark:text-gray-500
+                                            dark:hover:text-white
                                         "
                                     >
                                         <Download className="h-4 w-4" />
@@ -299,10 +312,12 @@ export default function Hero({
                                         gap-2
                                         text-sm
                                         font-medium
-                                        text-gray-500
+                                        text-slate-600
                                         transition-colors
                                         duration-300
-                                        hover:text-white
+                                        hover:text-slate-900
+                                        dark:text-gray-500
+                                        dark:hover:text-white
                                     "
                                 >
                                     <Mail className="h-4 w-4 text-accent-500" />
@@ -412,7 +427,9 @@ export default function Hero({
                             font-extrabold
                             leading-[0.84]
                             tracking-[-0.06em]
-                            text-white
+                            text-slate-900
+                            transition-colors
+                            dark:text-white
                         "
                     >
                         <span className="block">
@@ -494,8 +511,10 @@ export default function Hero({
                         relative
                         z-30
                         border-t
-                        border-white/[0.06]
+                        border-slate-200
                         py-10
+                        transition-colors
+                        dark:border-white/[0.06]
                         md:self-center
                         md:border-l
                         md:border-t-0
@@ -514,10 +533,11 @@ export default function Hero({
                             font-semibold
                             uppercase
                             tracking-[0.28em]
-                            text-gray-500
+                            text-slate-500
+                            dark:text-gray-500
                         "
                     >
-                        <span className="h-px w-7 bg-gray-600" />
+                        <span className="h-px w-7 bg-slate-300 dark:bg-gray-600" />
 
                         <span>
                             Introduction
@@ -532,7 +552,9 @@ export default function Hero({
                             font-semibold
                             leading-[1.15]
                             tracking-[-0.03em]
-                            text-white
+                            text-slate-900
+                            transition-colors
+                            dark:text-white
                             sm:text-3xl
                             md:text-[2rem]
                         "
@@ -552,7 +574,9 @@ export default function Hero({
                             max-w-xl
                             text-sm
                             leading-7
-                            text-gray-400
+                            text-slate-600
+                            transition-colors
+                            dark:text-gray-400
                             md:text-base
                             md:leading-8
                         "
@@ -604,7 +628,11 @@ export default function Hero({
                                     items-center
                                     gap-2
                                     text-sm
-                                    text-gray-400
+                                    text-slate-600
+                                    transition-colors
+                                    hover:text-slate-900
+                                    dark:text-gray-400
+                                    dark:hover:text-white
                                     md:text-base
                                 "
                             >
@@ -634,7 +662,11 @@ export default function Hero({
                                 items-center
                                 gap-2
                                 text-xs
-                                text-gray-500
+                                text-slate-600
+                                transition-colors
+                                hover:text-slate-900
+                                dark:text-gray-500
+                                dark:hover:text-white
                                 md:text-sm
                             "
                         >

@@ -53,7 +53,7 @@ export default function SocialLinks({ links = [], size = 'md', showLabels = fals
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={link.label || link.platform}
-                        className={`inline-flex items-center justify-center gap-2 border border-dark-600/80 bg-dark-800/60 text-gray-300 transition-all hover:border-accent-500/60 hover:bg-dark-700 hover:text-accent-500 ${showLabels ? 'h-9 rounded-xl px-3 text-xs font-semibold lg:text-sm' : `rounded-full ${sizeClasses[size] || sizeClasses.md}`}`}
+                        className={`inline-flex items-center justify-center gap-2 border border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:border-accent-500/60 hover:bg-slate-100 hover:text-accent-500 dark:border-dark-600/80 dark:bg-dark-800/60 dark:text-gray-300 dark:shadow-none dark:hover:bg-dark-700 dark:hover:text-accent-500 ${showLabels ? 'h-9 rounded-xl px-3 text-xs font-semibold lg:text-sm' : `rounded-full ${sizeClasses[size] || sizeClasses.md}`}`}
                     >
                         <IconComponent className={iconSizes[size] || iconSizes.md} />
                         {showLabels && <span>{link.label || link.platform}</span>}

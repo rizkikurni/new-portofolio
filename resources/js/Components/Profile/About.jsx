@@ -17,7 +17,7 @@ export default function About({ aboutText }) {
                 <ScrollReveal
                     variant="from-left"
                     delay={250}
-                    className="portfolio-prose text-base leading-8 text-gray-300 md:text-[17px] md:leading-9 xl:text-lg"
+                    className="portfolio-prose text-base leading-8 text-slate-700 transition-colors dark:text-gray-300 md:text-[17px] md:leading-9 xl:text-lg"
                     dangerouslySetInnerHTML={{ __html: aboutText }}
                 />
                 <div className="space-y-3">
@@ -26,10 +26,10 @@ export default function About({ aboutText }) {
                             key={label}
                             variant="from-right"
                             delay={320 + index * 80}
-                            className="flex items-center gap-4 rounded-2xl border border-white/10 bg-dark-800 p-4"
+                            className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-colors dark:border-white/10 dark:bg-dark-800 dark:shadow-none"
                         >
                             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-500/10 text-accent-500"><Icon className="h-5 w-5" /></span>
-                            <span className="text-sm font-semibold text-gray-200 md:text-base">{label}</span>
+                            <span className="text-sm font-semibold text-slate-800 transition-colors dark:text-gray-200 md:text-base">{label}</span>
                         </ScrollReveal>
                     ))}
                 </div>

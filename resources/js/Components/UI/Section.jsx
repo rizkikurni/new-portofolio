@@ -12,10 +12,10 @@ export default function Section({ id, tag, title, subtitle, children, className 
                     </ScrollReveal>
                     <ScrollReveal variant="rise" delay={150}>
                         {title && (
-                            <h2 className="max-w-3xl text-3xl font-extrabold leading-tight tracking-[-0.035em] text-white sm:text-4xl md:text-[2.5rem] xl:text-5xl">{title}</h2>
+                            <h2 className="max-w-3xl text-3xl font-extrabold leading-tight tracking-[-0.035em] text-slate-900 transition-colors dark:text-white sm:text-4xl md:text-[2.5rem] xl:text-5xl">{title}</h2>
                         )}
                         {subtitle && (
-                            <p className="mt-4 max-w-2xl text-sm leading-7 text-gray-400 sm:text-base md:text-[17px] md:leading-8 xl:text-lg">{subtitle}</p>
+                            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 transition-colors dark:text-gray-400 sm:text-base md:text-[17px] md:leading-8 xl:text-lg">{subtitle}</p>
                         )}
                     </ScrollReveal>
                 </div>

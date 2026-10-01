@@ -27,7 +27,7 @@ export default function ServicesGrid({ profile = {}, projects = [], skills = [] 
     ];
 
     return (
-        <section id="services" className="py-16 md:py-24 border-t border-dark-600/40">
+        <section id="services" className="py-16 md:py-24 border-t border-slate-200 transition-colors dark:border-dark-600/40">
             {/* 1. Top Section: Query & Discussion (Left) + Quote & Stats (Right) */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-16 md:mb-20">
                 {/* Left Side: Contact Query */}
@@ -37,11 +37,11 @@ export default function ServicesGrid({ profile = {}, projects = [], skills = [] 
                         <span>Contact</span>
                     </div>
 
-                    <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-white leading-tight">
+                    <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-bold text-slate-900 transition-colors dark:text-white leading-tight">
                         Any Type Of Query & Discussion.
                     </h2>
 
-                    <p className="text-sm text-gray-400 leading-relaxed max-w-md">
+                    <p className="text-sm text-slate-600 transition-colors dark:text-gray-400 leading-relaxed max-w-md">
                         {profile.tagline || 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa.'}
                     </p>
 
@@ -61,10 +61,10 @@ export default function ServicesGrid({ profile = {}, projects = [], skills = [] 
                 {/* Right Side: Creativity Quote & Metric Counters */}
                 <div className="lg:col-span-7 space-y-8">
                     <div className="space-y-3">
-                        <p className="text-xl sm:text-2xl font-bold text-white leading-snug">
+                        <p className="text-xl sm:text-2xl font-bold text-slate-900 transition-colors dark:text-white leading-snug">
                             You can't use up creativity, the more you use, more you have in your signifiant mind.
                         </p>
-                        <p className="text-xs text-gray-500 leading-relaxed max-w-lg">
+                        <p className="text-xs text-slate-500 transition-colors dark:text-gray-500 leading-relaxed max-w-lg">
                             Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa.
                         </p>
                     </div>
@@ -72,19 +72,19 @@ export default function ServicesGrid({ profile = {}, projects = [], skills = [] 
                     {/* Stats Counters */}
                     <div className="flex flex-wrap items-center gap-12 sm:gap-16 pt-2">
                         <div className="flex items-baseline gap-3">
-                            <span className="text-5xl sm:text-6xl font-display font-extrabold text-white tracking-tight">
+                            <span className="text-5xl sm:text-6xl font-display font-extrabold text-slate-900 transition-colors dark:text-white tracking-tight">
                                 14
                             </span>
-                            <span className="text-xs text-gray-400 font-medium leading-tight max-w-[90px]">
+                            <span className="text-xs text-slate-600 transition-colors dark:text-gray-400 font-medium leading-tight max-w-[90px]">
                                 Years of Experience.
                             </span>
                         </div>
 
                         <div className="flex items-baseline gap-3">
-                            <span className="text-5xl sm:text-6xl font-display font-extrabold text-white tracking-tight">
+                            <span className="text-5xl sm:text-6xl font-display font-extrabold text-slate-900 transition-colors dark:text-white tracking-tight">
                                 187
                             </span>
-                            <span className="text-xs text-gray-400 font-medium leading-tight max-w-[90px]">
+                            <span className="text-xs text-slate-600 transition-colors dark:text-gray-400 font-medium leading-tight max-w-[90px]">
                                 Satisfied Clients.
                             </span>
                         </div>
@@ -120,16 +120,16 @@ export default function ServicesGrid({ profile = {}, projects = [], skills = [] 
                     return (
                         <div
                             key={index}
-                            className="bg-dark-700 border border-dark-600/80 rounded-3xl p-8 sm:p-10 text-white flex flex-col justify-between min-h-[300px] shadow-lg relative overflow-hidden group hover:border-dark-500 transition-colors"
+                            className="bg-white border border-slate-200 shadow-sm rounded-3xl p-8 sm:p-10 text-slate-900 flex flex-col justify-between min-h-[300px] relative overflow-hidden group hover:border-slate-300 transition-colors dark:bg-dark-700 dark:border-dark-600/80 dark:text-white dark:shadow-lg dark:hover:border-dark-500"
                         >
-                            <div className="w-12 h-12 rounded-2xl bg-dark-600 flex items-center justify-center mb-12">
+                            <div className="w-12 h-12 rounded-2xl bg-accent-500/10 flex items-center justify-center mb-12 dark:bg-dark-600">
                                 <Icon className="w-6 h-6 text-accent-500" />
                             </div>
                             <div>
-                                <h3 className="text-2xl sm:text-[26px] font-bold text-white mb-2 leading-tight">
+                                <h3 className="text-2xl sm:text-[26px] font-bold text-slate-900 transition-colors dark:text-white mb-2 leading-tight">
                                     {item.title}
                                 </h3>
-                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                <p className="text-xs font-semibold text-slate-500 transition-colors dark:text-gray-500 uppercase tracking-wider">
                                     {item.count}
                                 </p>
                             </div>

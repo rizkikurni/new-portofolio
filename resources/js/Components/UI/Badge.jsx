@@ -1,7 +1,7 @@
 const variants = {
-    accent: 'bg-accent-500/15 text-accent-500 border border-accent-500/20',
-    dark: 'bg-dark-600/50 text-gray-300 border border-dark-500/50',
-    outline: 'bg-transparent text-gray-400 border border-dark-600',
+    accent: 'bg-accent-500/15 text-accent-600 dark:text-accent-500 border border-accent-500/20',
+    dark: 'bg-slate-100 text-slate-700 border border-slate-200 dark:bg-dark-600/50 dark:text-gray-300 dark:border-dark-500/50',
+    outline: 'bg-transparent text-slate-600 border border-slate-300 dark:text-gray-400 dark:border-dark-600',
 };
 
 export default function Badge({ children, variant = 'dark', className = '' }) {

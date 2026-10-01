@@ -78,10 +78,8 @@ export default function Show({
         (sectionKey) => sectionComponentMap[sectionKey] && sectionHasContent[sectionKey],
     );
 
-    const contentSectionKeys = visibleSectionKeys.filter((sectionKey) => sectionKey !== 'hero');
-
     return (
-        <div className="min-h-screen overflow-x-hidden bg-dark-900 font-sans text-gray-300 antialiased selection:bg-accent-500/25 selection:text-white">
+        <div className="min-h-screen overflow-x-hidden bg-slate-50 font-sans text-slate-700 antialiased selection:bg-accent-500/25 selection:text-white transition-colors duration-200 dark:bg-dark-900 dark:text-gray-300">
             {/* Dynamic SEO Meta Tags */}
             <SeoHead seo={seo} />
 
@@ -101,15 +99,10 @@ export default function Show({
 
                     if (sectionKey === 'hero') return component;
 
-                    const sectionIndex = contentSectionKeys.indexOf(sectionKey);
-                    const backgroundClass = sectionIndex % 2 === 0
-                        ? 'bg-dark-900'
-                        : 'bg-dark-800';
-
                     return (
-                        <div key={`${sectionKey}-background`} className={backgroundClass}>
-                            <Container>{component}</Container>
-                        </div>
+                        <Container key={`${sectionKey}-container`}>
+                            {component}
+                        </Container>
                     );
                 })}
             </main>

@@ -1,7 +1,7 @@
 const variants = {
-    accent: 'bg-accent-500 hover:bg-accent-400 text-dark-900 font-bold',
-    dark: 'bg-dark-700 hover:bg-dark-600 text-white border border-dark-600',
-    ghost: 'bg-transparent hover:bg-dark-700 text-gray-300 hover:text-white',
+    accent: 'bg-accent-500 hover:bg-accent-400 text-white dark:text-dark-900 font-bold shadow-sm',
+    dark: 'bg-slate-100 hover:bg-slate-200 text-slate-900 border border-slate-200 dark:bg-dark-700 dark:hover:bg-dark-600 dark:text-white dark:border-dark-600',
+    ghost: 'bg-transparent hover:bg-slate-100 text-slate-700 hover:text-slate-900 dark:hover:bg-dark-700 dark:text-gray-300 dark:hover:text-white',
     link: 'bg-transparent text-accent-500 hover:text-accent-400 underline underline-offset-4 decoration-accent-500/50',
 };
 
